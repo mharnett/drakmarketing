@@ -39,6 +39,12 @@ export function Footer() {
           >
             Contact
           </Link>
+          <Link
+            href="/privacy"
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
+            Privacy
+          </Link>
           <a
             href="https://github.com/mharnett"
             target="_blank"
