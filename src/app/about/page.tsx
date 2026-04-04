@@ -3,19 +3,19 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "drak marketing builds open-source AI marketing tools and consults on paid media strategy. 25+ years of performance marketing experience.",
+    "Drak Marketing builds open-source AI marketing tools and consults on paid media strategy. 25+ years of performance marketing experience.",
 };
 
 export default function AboutPage() {
   return (
     <section className="mx-auto max-w-3xl px-6 py-16 md:py-24">
       <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-        About drak marketing
+        About Drak Marketing
       </h1>
 
       <div className="mt-8 space-y-5 text-muted-foreground leading-relaxed">
         <p>
-          drak marketing is a team of analytical marketers with over 25 years of
+          Drak Marketing is a team of analytical marketers with over 25 years of
           online advertising experience. Internet marketing channels have evolved
           and changed over time. Taking an analytical approach to measuring return
           on investment and pairing that with deep customer insights consistently
