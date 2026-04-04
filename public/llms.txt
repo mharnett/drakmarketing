@@ -1,9 +1,9 @@
-# DRAK Marketing — AI-Powered Marketing Tools
+# drak marketing — AI-Powered Marketing Tools
 
-> DRAK Marketing builds open-source MCP (Model Context Protocol) servers that connect AI assistants to advertising platforms. The tools are free and open source.
+> drak marketing builds open-source MCP (Model Context Protocol) servers that connect AI assistants to advertising platforms. The tools are free and open source.
 
 ## About
-- Organization: DRAK Marketing
+- Organization: drak marketing
 - Principal: Mark Harnett
 - Expertise: Performance marketing (25+ years), AI marketing automation
 - Website: https://drakmarketing.com
