@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { blogPosts, formatDate } from "@/lib/blog-posts";
+import { allBlogPosts, formatDate } from "@/lib/blog-posts";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -19,7 +19,7 @@ export default function BlogPage() {
       </div>
 
       <div className="space-y-10">
-        {blogPosts.map((post) => (
+        {allBlogPosts.map((post) => (
           <article key={post.slug} className="group">
             <Link href={`/blog/${post.slug}`} className="block">
               <time className="text-xs text-muted-foreground uppercase tracking-wide">

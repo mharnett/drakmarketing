@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { tools } from "@/lib/tools-data";
 import { allCaseStudies } from "@/lib/case-studies";
-import { blogPosts } from "@/lib/blog-posts";
+import { allBlogPosts } from "@/lib/blog-posts";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://drakmarketing.com";
@@ -20,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  const blogPages = blogPosts.map((p) => ({
+  const blogPages = allBlogPosts.map((p) => ({
     url: `${base}/blog/${p.slug}`,
     lastModified: new Date(p.date),
     changeFrequency: "yearly" as const,
