@@ -5,12 +5,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ToolCard } from "@/components/tool-card";
 import { tools, totalToolCount, publishedCount } from "@/lib/tools-data";
 import { featuredCaseStudies } from "@/lib/case-studies";
+import { getAllToolStats } from "@/lib/tool-stats";
 
 const featured = tools.filter((t) =>
   ["google-ads", "linkedin-ads", "bing-ads", "ga4"].includes(t.slug)
 );
 
-export default function Home() {
+export default async function Home() {
+  const stats = await getAllToolStats(featured);
   return (
     <>
       {/* Hero — dark with gradient */}
@@ -124,7 +126,7 @@ export default function Home() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           {featured.map((tool) => (
-            <ToolCard key={tool.slug} tool={tool} />
+            <ToolCard key={tool.slug} tool={tool} stats={stats[tool.slug]} />
           ))}
         </div>
         <Link
