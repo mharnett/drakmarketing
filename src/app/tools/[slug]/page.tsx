@@ -38,8 +38,80 @@ export default async function ToolPage({ params }: Props) {
 
   const stats = await getToolStats(tool);
 
+  const faqs = [
+    {
+      q: `How do I install ${tool.name}?`,
+      a: tool.installCommand
+        ? `Run \`${tool.installCommand}\` in your terminal. No build step or additional configuration required.`
+        : `${tool.name} is available as a hosted service. See the documentation for setup instructions.`,
+    },
+    { q: `What does ${tool.name} do?`, a: tool.longDescription },
+    {
+      q: `Is ${tool.name} free?`,
+      a: `Yes. ${tool.name} is open source and free to use. The source code is available on GitHub.`,
+    },
+    {
+      q: `What AI assistants does ${tool.name} work with?`,
+      a: "Any MCP-compatible AI assistant, including Claude Code, Claude Desktop, Cursor, Windsurf, and others that support the Model Context Protocol.",
+    },
+  ];
+
+  const schemaData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: tool.name,
+      description: tool.longDescription,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Any",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      ...(tool.npmPackage && {
+        installUrl: `https://www.npmjs.com/package/${tool.npmPackage}`,
+      }),
+      ...(tool.githubRepo && {
+        codeRepository: `https://github.com/${tool.githubRepo}`,
+      }),
+      author: {
+        "@type": "Organization",
+        name: "Drak Marketing",
+        url: "https://drakmarketing.com",
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Tools",
+          item: "https://drakmarketing.com/tools",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: tool.name,
+          item: `https://drakmarketing.com/tools/${tool.slug}`,
+        },
+      ],
+    },
+  ];
+
   return (
     <section className="mx-auto max-w-3xl px-6 py-16 md:py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+      />
       <Link
         href="/tools"
         className="mb-8 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
@@ -132,26 +204,9 @@ export default async function ToolPage({ params }: Props) {
           Frequently Asked Questions
         </h2>
         <div className="space-y-6">
-          <Faq
-            q={`How do I install ${tool.name}?`}
-            a={
-              tool.installCommand
-                ? `Run \`${tool.installCommand}\` in your terminal. No build step or additional configuration required.`
-                : `${tool.name} is available as a hosted service. See the documentation for setup instructions.`
-            }
-          />
-          <Faq
-            q={`What does ${tool.name} do?`}
-            a={tool.longDescription}
-          />
-          <Faq
-            q={`Is ${tool.name} free?`}
-            a={`Yes. ${tool.name} is open source and free to use. The source code is available on GitHub.`}
-          />
-          <Faq
-            q={`What AI assistants does ${tool.name} work with?`}
-            a="Any MCP-compatible AI assistant, including Claude Code, Claude Desktop, Cursor, Windsurf, and others that support the Model Context Protocol."
-          />
+          {faqs.map((f) => (
+            <Faq key={f.q} q={f.q} a={f.a} />
+          ))}
         </div>
       </div>
     </section>
