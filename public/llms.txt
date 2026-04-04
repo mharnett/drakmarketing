@@ -1,0 +1,29 @@
+# DRAK Marketing — AI-Powered Marketing Tools
+
+> DRAK Marketing builds open-source MCP (Model Context Protocol) servers that connect AI assistants to advertising platforms. The tools are free and open source.
+
+## About
+- Organization: DRAK Marketing
+- Principal: Mark Harnett
+- Expertise: Performance marketing (25+ years), AI marketing automation
+- Website: https://drakmarketing.com
+
+## MCP Marketing Suite
+A collection of 8 open-source MCP servers with 124+ tools:
+
+- **mcp-google-ads** (35 tools): Google Ads API with MCC support, GAQL queries, safe-by-default
+- **mcp-linkedin-ads** (65+ tools): LinkedIn Campaign Manager, multi-account, targeting, creatives
+- **mcp-bing-ads** (30+ tools): Microsoft Advertising, quality scores, bid automation
+- **mcp-ga4** (9 tools): Google Analytics 4, historical + realtime reports, custom dimensions
+- **mcp-google-gsc** (4 tools): Google Search Console, search analytics, URL inspection
+- **mcp-gtm-ga4** (13 tools): Google Tag Manager + GA4, consent auditing, sandbox safety
+- **mcp-reddit-ads** (18 tools): Reddit Ads API v3, targeting, safe-by-default
+- **meta-ads-mcp** (28+ tools): Meta (Facebook/Instagram) advertising
+
+## Installation
+All npm-published tools install with: npx <package-name>
+No build step or configuration files required.
+
+## Contact
+- Email: mark@drakmarketing.com
+- GitHub: https://github.com/mharnett
