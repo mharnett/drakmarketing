@@ -21,7 +21,7 @@ export function Nav() {
         <Link href="/" className="flex items-center gap-2">
           <Image
             src="/images/misc/logo.png"
-            alt="drak marketing"
+            alt="Drak Marketing"
             width={110}
             height={50}
             className="h-10 w-auto"
