@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, Check } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowUpRight, Check, Star } from "lucide-react";
 import { GitHubIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { InstallCommand } from "@/components/install-command";
 import { tools } from "@/lib/tools-data";
+import { getToolStats } from "@/lib/tool-stats";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -25,10 +26,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+function formatNumber(n: number): string {
+  if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}k`;
+  return n.toString();
+}
+
 export default async function ToolPage({ params }: Props) {
   const { slug } = await params;
   const tool = tools.find((t) => t.slug === slug);
   if (!tool) notFound();
+
+  const stats = await getToolStats(tool);
 
   return (
     <section className="mx-auto max-w-3xl px-6 py-16 md:py-24">
@@ -45,6 +53,22 @@ export default async function ToolPage({ params }: Props) {
           <h1 className="text-3xl font-bold tracking-tight">{tool.name}</h1>
           <Badge variant="secondary">{tool.toolCount} tools</Badge>
         </div>
+        {(stats.stars > 0 || stats.downloads > 0) && (
+          <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+            {stats.stars > 0 && (
+              <span className="inline-flex items-center gap-1.5">
+                <Star className="h-4 w-4" />
+                {formatNumber(stats.stars)} stars
+              </span>
+            )}
+            {stats.downloads > 0 && (
+              <span className="inline-flex items-center gap-1.5">
+                <ArrowDown className="h-4 w-4" />
+                {formatNumber(stats.downloads)} downloads/wk
+              </span>
+            )}
+          </div>
+        )}
         <p className="text-lg text-muted-foreground leading-relaxed">
           {tool.longDescription}
         </p>

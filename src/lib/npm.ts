@@ -1,16 +1,14 @@
-export async function getNpmWeeklyDownloads(
-  pkg: string,
-): Promise<number | null> {
-  if (!pkg) return null;
+export async function getNpmWeeklyDownloads(pkg: string): Promise<number> {
+  if (!pkg) return 0;
   try {
     const res = await fetch(
       `https://api.npmjs.org/downloads/point/last-week/${pkg}`,
       { next: { revalidate: 86400 } },
     );
-    if (!res.ok) return null;
+    if (!res.ok) return 0;
     const data = await res.json();
-    return data.downloads ?? null;
+    return data.downloads ?? 0;
   } catch {
-    return null;
+    return 0;
   }
 }

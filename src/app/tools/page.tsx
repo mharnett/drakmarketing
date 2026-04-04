@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import { ToolCard } from "@/components/tool-card";
 import { tools, totalToolCount } from "@/lib/tools-data";
+import { getAllToolStats } from "@/lib/tool-stats";
 
 export const metadata: Metadata = {
   title: "Free Marketing Tools",
   description: `${totalToolCount}+ open-source MCP tools for Google Ads, LinkedIn Ads, Bing Ads, GA4, and more. Install with a single command.`,
 };
 
-export default function ToolsPage() {
+export default async function ToolsPage() {
+  const stats = await getAllToolStats(tools);
+
   return (
     <section className="mx-auto max-w-5xl px-6 py-16 md:py-24">
       <div className="max-w-2xl mb-12">
@@ -22,7 +25,7 @@ export default function ToolsPage() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         {tools.map((tool) => (
-          <ToolCard key={tool.slug} tool={tool} />
+          <ToolCard key={tool.slug} tool={tool} stats={stats[tool.slug]} />
         ))}
       </div>
     </section>
