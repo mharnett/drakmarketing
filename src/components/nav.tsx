@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -15,10 +16,17 @@ export function Nav() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
-        <Link href="/" className="text-lg font-semibold tracking-tight">
-          DRAK Marketing
+    <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/images/misc/logo.png"
+            alt="drak marketing"
+            width={110}
+            height={50}
+            className="h-10 w-auto"
+            priority
+          />
         </Link>
 
         {/* Desktop */}
@@ -27,14 +35,14 @@ export function Nav() {
             <Link
               key={l.href}
               href={l.href}
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {l.label}
             </Link>
           ))}
           <Link
             href="/contact"
-            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md"
           >
             Get in Touch
           </Link>
@@ -52,17 +60,24 @@ export function Nav() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="border-t border-border bg-background px-6 py-4 md:hidden">
+        <div className="border-t border-border/50 bg-background px-6 py-4 md:hidden">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className="block py-2 text-sm text-muted-foreground"
+              className="block py-2.5 text-sm font-medium text-muted-foreground"
               onClick={() => setOpen(false)}
             >
               {l.label}
             </Link>
           ))}
+          <Link
+            href="/contact"
+            className="mt-2 block rounded-lg bg-primary px-4 py-2.5 text-center text-sm font-medium text-primary-foreground"
+            onClick={() => setOpen(false)}
+          >
+            Get in Touch
+          </Link>
         </div>
       )}
     </nav>

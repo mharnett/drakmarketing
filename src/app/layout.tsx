@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "DRAK Marketing — AI-Powered Marketing Tools & Strategy",
-    template: "%s | DRAK Marketing",
+    default: "drak marketing — AI-Powered Marketing Tools & Strategy",
+    template: "%s | drak marketing",
   },
   description:
     "Open-source MCP servers for Google Ads, LinkedIn Ads, Bing Ads, GA4, and more. 124+ tools built by marketers, for marketers. Free to install and use.",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    siteName: "DRAK Marketing",
+    siteName: "drak marketing",
   },
 };
 
@@ -46,7 +46,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              name: "DRAK Marketing",
+              name: "drak marketing",
               url: "https://drakmarketing.com",
               description:
                 "Open-source MCP servers for marketing automation. 124+ tools for Google Ads, LinkedIn Ads, Bing Ads, GA4, and more.",

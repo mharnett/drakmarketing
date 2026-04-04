@@ -6,7 +6,7 @@ export function Footer() {
     <footer className="mt-auto border-t border-border bg-muted/40">
       <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-6 py-10 sm:flex-row">
         <div className="text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} DRAK Marketing. All rights reserved.
+          &copy; {new Date().getFullYear()} drak marketing. All rights reserved.
         </div>
         <div className="flex items-center gap-6">
           <Link
