@@ -35,7 +35,7 @@ export default function ContactPage() {
       </p>
 
       <form
-        action="https://formspree.io/f/xyzgqkzl"
+        action="https://formsubmit.co/mark@drakmarketing.com"
         method="POST"
         onSubmit={(e) => {
           e.preventDefault();
@@ -50,6 +50,11 @@ export default function ContactPage() {
         }}
         className="mt-8 space-y-5"
       >
+        {/* Honeypot for spam prevention */}
+        <input type="text" name="_honey" className="hidden" />
+        {/* Disable captcha redirect */}
+        <input type="hidden" name="_captcha" value="false" />
+
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
             <label
