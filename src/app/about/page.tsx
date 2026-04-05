@@ -1,10 +1,35 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "About",
   description:
     "Drak Marketing builds open-source AI marketing tools and consults on paid media strategy. 25+ years of performance marketing experience.",
 };
+
+const team = [
+  {
+    name: "Mark Harnett",
+    role: "Principal",
+    image: "/images/team/mark-n.png",
+    linkedin: "https://www.linkedin.com/in/harnett/",
+    bio: "Experienced online marketer with an analytical approach to driving profitable customer acquisition through rigorous testing, landing page optimization, and customer value analysis. Built the MCP Marketing Suite to connect AI assistants to the ad platforms he manages every day.",
+  },
+  {
+    name: "Felipe Fuentes",
+    role: "Data Analyst",
+    image: "/images/team/felipe-n.png",
+    linkedin: "https://www.linkedin.com/in/felipe-fuentes/",
+    bio: "Data analyst skilled in digital marketing analytics and web analytics. Turns campaign data into actionable insights across Google Ads, Meta, and LinkedIn.",
+  },
+  {
+    name: "Jose Fuentes",
+    role: "Data Engineering",
+    image: "/images/team/jose-n.png",
+    linkedin: "https://www.linkedin.com/in/jose-f-0047babb/",
+    bio: "Data engineer focused on data infrastructure, pipeline automation, and ensuring data quality for data-driven marketing insights.",
+  },
+];
 
 export default function AboutPage() {
   return (
@@ -42,14 +67,53 @@ export default function AboutPage() {
         </p>
       </div>
 
+      {/* Team */}
+      <div className="mt-16">
+        <h2 className="text-lg font-semibold mb-8">Meet the Team</h2>
+        <div className="grid gap-8 sm:grid-cols-3">
+          {team.map((person) => (
+            <div key={person.name} className="text-center">
+              <Image
+                src={person.image}
+                alt={person.name}
+                width={120}
+                height={120}
+                className="mx-auto rounded-full object-cover"
+              />
+              <h3 className="mt-4 font-semibold text-sm">{person.name}</h3>
+              <p className="text-xs text-muted-foreground">{person.role}</p>
+              <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                {person.bio}
+              </p>
+              <a
+                href={person.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-block text-xs font-medium text-primary hover:underline"
+              >
+                LinkedIn
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Certifications */}
-      <div className="mt-12 flex items-center gap-6">
-        <div className="rounded-lg border border-border px-4 py-2 text-xs font-medium text-muted-foreground">
-          Google Partner
-        </div>
-        <div className="rounded-lg border border-border px-4 py-2 text-xs font-medium text-muted-foreground">
-          Meta Business Partner
-        </div>
+      <div className="mt-16 flex items-center gap-6">
+        <Image
+          src="/images/badges/google-partner.svg"
+          alt="Google Partner"
+          width={100}
+          height={40}
+          className="h-10 w-auto"
+        />
+        <Image
+          src="/images/badges/meta-business-partner.jpg"
+          alt="Meta Business Partner"
+          width={100}
+          height={40}
+          className="h-10 w-auto rounded"
+        />
       </div>
     </section>
   );
