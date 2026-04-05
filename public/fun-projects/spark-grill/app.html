@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>Spark Grill</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        h1 { font-size: 1.4rem; color: #ff6b35; margin-bottom: 6px; }
+        .connect-btn {
+            padding: 14px 32px;
+            border: 2px solid #ff6b35;
+            border-radius: 12px;
+            background: #2a1510;
+            color: #ff6b35;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+        .connect-btn:active { transform: scale(0.97); }
+        .connect-btn.connected { border-color: #4ade80; color: #4ade80; background: #1a2a1a; }
+        .connect-btn.connecting { border-color: #fbbf24; color: #fbbf24; background: #2a2510; }
+        .status-msg { font-size: 0.8rem; color: #64748b; margin-bottom: 16px; text-align: center; min-height: 1.2em; }
+        .temps {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+        .temp-card {
+            background: #16213e;
+            border-radius: 14px;
+            padding: 16px 8px;
+            text-align: center;
+            border: 2px solid #2a2a4a;
+        }
+        .temp-card.hot { border-color: #ff6b35; }
+        .temp-card.warm { border-color: #fbbf24; }
+        .temp-card.cold { border-color: #60a5fa; }
+        .temp-card.off { border-color: #4a4a6a; opacity: 0.5; }
+        .temp-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin-bottom: 6px; }
+        .temp-value { font-size: 2rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+        .temp-unit { font-size: 0.85rem; color: #94a3b8; }
+        .temp-na { font-size: 1rem; color: #64748b; }
+        .info-row { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; font-size: 0.85rem; color: #94a3b8; }
+        .info-row span { color: #fbbf24; font-weight: 600; }
+        .setpoint-section { width: 100%; max-width: 500px; margin-bottom: 20px; }
+        .section-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin-bottom: 10px; text-align: center; }
+        .setpoint-controls { display: flex; align-items: center; justify-content: center; gap: 16px; }
+        .sp-btn {
+            width: 48px; height: 48px; border-radius: 50%;
+            border: 2px solid #2a2a4a; background: #16213e; color: #eee;
+            font-size: 1.5rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .sp-btn:active { background: #1e2d50; transform: scale(0.93); }
+        .sp-value { font-size: 2rem; font-weight: 700; min-width: 120px; text-align: center; font-variant-numeric: tabular-nums; }
+        .sp-value .unit { font-size: 1rem; color: #94a3b8; }
+        .set-btn {
+            padding: 8px 20px; border: 2px solid #ff6b35; border-radius: 10px;
+            background: #2a1510; color: #ff6b35; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+        }
+        .set-btn:active { transform: scale(0.97); }
+        .fan-speeds { display: flex; justify-content: center; gap: 20px; margin-top: 8px; font-size: 0.75rem; color: #64748b; }
+        .log { width: 100%; max-width: 500px; margin-top: auto; padding-top: 12px; font-size: 0.7rem; color: #4a4a6a; text-align: center; max-height: 80px; overflow: hidden; }
+    </style>
+</head>
+<body>
+    <h1>Spark Grill</h1>
+    <button class="connect-btn" id="connectBtn" onclick="toggleConnect()">Connect via Bluetooth</button>
+    <div class="status-msg" id="statusMsg"></div>
+    <div class="temps">
+        <div class="temp-card off" id="kettleCard">
+            <div class="temp-label">Grill</div>
+            <div class="temp-value" id="kettleTemp"><span class="temp-na">--</span></div>
+        </div>
+        <div class="temp-card off" id="probe0Card">
+            <div class="temp-label">Probe 1</div>
+            <div class="temp-value" id="probe0Temp"><span class="temp-na">--</span></div>
+        </div>
+        <div class="temp-card off" id="probe1Card">
+            <div class="temp-label">Probe 2</div>
+            <div class="temp-value" id="probe1Temp"><span class="temp-na">--</span></div>
+        </div>
+    </div>
+    <div class="info-row">
+        <div>Target: <span id="setpointDisplay">--</span></div>
+        <div>Ignition: <span id="ignitionDisplay">--</span></div>
+    </div>
+    <div class="setpoint-section" id="setpointSection" style="display:none">
+        <div class="section-label">Set Temperature</div>
+        <div class="setpoint-controls">
+            <button class="sp-btn" onclick="adjustSetpoint(-25)">-</button>
+            <div class="sp-value"><span id="spTarget">--</span><span class="unit">&deg;F</span></div>
+            <button class="sp-btn" onclick="adjustSetpoint(25)">+</button>
+        </div>
+        <div style="text-align:center;margin-top:8px">
+            <button class="set-btn" onclick="writeSetpoint()">Set</button>
+        </div>
+    </div>
+    <div class="fan-section" style="width:100%;max-width:500px;margin-bottom:16px">
+        <div class="section-label">Fan Speed</div>
+        <div class="fan-speeds">
+            <span>Stoke: <span id="stokeSpeed">--</span></span>
+            <span>Cool: <span id="coolSpeed">--</span></span>
+        </div>
+    </div>
+    <div class="log" id="log"></div>
+<script>
+const SERVICE = 'd9960001-fcb8-4457-850f-3114bd9d89e9';
+const CHARS = {
+    kettle:   'd9960002-fcb8-4457-850f-3114bd9d89e9',
+    probe0:   'd9960003-fcb8-4457-850f-3114bd9d89e9',
+    probe1:   'd9960004-fcb8-4457-850f-3114bd9d89e9',
+    setpoint: 'd9960005-fcb8-4457-850f-3114bd9d89e9',
+    ignition: 'd9960006-fcb8-4457-850f-3114bd9d89e9',
+    stoke:    'd9960100-fcb8-4457-850f-3114bd9d89e9',
+    cool:     'd9960101-fcb8-4457-850f-3114bd9d89e9',
+    serialTx: 'd9961001-fcb8-4457-850f-3114bd9d89e9',
+    serialRx: 'd9961000-fcb8-4457-850f-3114bd9d89e9',
+};
+const PROBE_DISCONNECTED = -10;
+let device = null, server = null, chars = {};
+let currentSetpoint = 0, targetSetpoint = 0;
+
+function log(msg) { document.getElementById('log').textContent = msg; console.log(msg); }
+
+function decodeFloat(dv, off) { return dv.getFloat32(off || 0, true); }
+
+function encodeFloat(v) {
+    const buf = new ArrayBuffer(4);
+    new DataView(buf).setFloat32(0, v, true);
+    return new Uint8Array(buf);
+}
+
+function updateTemp(cardId, valueId, value, isProbe) {
+    const card = document.getElementById(cardId);
+    const el = document.getElementById(valueId);
+    if (isProbe && value < PROBE_DISCONNECTED) {
+        el.innerHTML = '<span class="temp-na">No Probe</span>';
+        card.className = 'temp-card off';
+    } else {
+        el.innerHTML = Math.round(value) + '<span class="temp-unit">&deg;F</span>';
+        card.className = 'temp-card ' + (value > 300 ? 'hot' : value > 150 ? 'warm' : 'cold');
+    }
+}
+
+function onKettle(e)   { updateTemp('kettleCard', 'kettleTemp', decodeFloat(e.target.value), false); }
+function onProbe0(e)   { updateTemp('probe0Card', 'probe0Temp', decodeFloat(e.target.value), true); }
+function onProbe1(e)   { updateTemp('probe1Card', 'probe1Temp', decodeFloat(e.target.value), true); }
+function onSetpoint(e) {
+    currentSetpoint = decodeFloat(e.target.value);
+    document.getElementById('setpointDisplay').textContent = Math.round(currentSetpoint) + '\u00B0F';
+    if (!targetSetpoint) {
+        targetSetpoint = currentSetpoint;
+        document.getElementById('spTarget').textContent = Math.round(targetSetpoint);
+    }
+}
+function onIgnition(e) {
+    const v = e.target.value.getUint8(0);
+    document.getElementById('ignitionDisplay').textContent = v === 0 ? 'Off' : 'Stage ' + v;
+}
+function onStoke(e) { document.getElementById('stokeSpeed').textContent = Math.round(decodeFloat(e.target.value)); }
+function onCool(e)  { document.getElementById('coolSpeed').textContent = Math.round(decodeFloat(e.target.value)); }
+function onSerialTx(e) {
+    const b = new Uint8Array(e.target.value.buffer);
+    log('TX: ' + Array.from(b).map(x => x.toString(16).padStart(2, '0')).join(''));
+}
+
+async function toggleConnect() {
+    if (device && device.gatt.connected) { device.gatt.disconnect(); return; }
+    await doConnect();
+}
+
+async function doConnect() {
+    const btn = document.getElementById('connectBtn');
+    const msg = document.getElementById('statusMsg');
+    try {
+        btn.textContent = 'Scanning...';
+        btn.className = 'connect-btn connecting';
+        msg.textContent = 'Select your Spark Grill from the list';
+
+        device = await navigator.bluetooth.requestDevice({
+            filters: [{ services: [SERVICE] }],
+        });
+
+        device.addEventListener('gattserverdisconnected', function() {
+            btn.textContent = 'Reconnect';
+            btn.className = 'connect-btn';
+            msg.textContent = 'Disconnected';
+        });
+
+        btn.textContent = 'Connecting...';
+        msg.textContent = 'Pairing with ' + (device.name || 'Spark Grill') + '...';
+
+        server = await device.gatt.connect();
+        const svc = await server.getPrimaryService(SERVICE);
+
+        var setup = [
+            ['kettle', onKettle], ['probe0', onProbe0], ['probe1', onProbe1],
+            ['setpoint', onSetpoint], ['ignition', onIgnition],
+            ['stoke', onStoke], ['cool', onCool], ['serialTx', onSerialTx],
+        ];
+
+        for (var i = 0; i < setup.length; i++) {
+            var key = setup[i][0], handler = setup[i][1];
+            try {
+                var c = await svc.getCharacteristic(CHARS[key]);
+                chars[key] = c;
+                var val = await c.readValue();
+                handler({ target: { value: val } });
+                await c.startNotifications();
+                c.addEventListener('characteristicvaluechanged', handler);
+            } catch (e) { console.warn(key + ': ' + e.message); }
+        }
+
+        try { chars.serialRx = await svc.getCharacteristic(CHARS.serialRx); }
+        catch (e) { console.warn('serialRx: ' + e.message); }
+
+        document.getElementById('setpointSection').style.display = 'block';
+        btn.textContent = 'Connected';
+        btn.className = 'connect-btn connected';
+        msg.textContent = device.name || 'Spark Grill';
+        log('Connected! Try setting a temperature.');
+
+    } catch (e) {
+        btn.textContent = 'Connect via Bluetooth';
+        btn.className = 'connect-btn';
+        msg.textContent = e.name === 'NotFoundError' ? 'No device selected' : e.message;
+    }
+}
+
+function adjustSetpoint(delta) {
+    targetSetpoint = Math.max(200, Math.min(800, (targetSetpoint || currentSetpoint) + delta));
+    document.getElementById('spTarget').textContent = Math.round(targetSetpoint);
+}
+
+async function writeSetpoint() {
+    if (!targetSetpoint || !chars.setpoint) return;
+    var data = encodeFloat(targetSetpoint);
+
+    // Try GATT write with response (may work if Android pairing unlocked it)
+    try {
+        await chars.setpoint.writeValueWithResponse(new DataView(data.buffer));
+        log('Setpoint set to ' + Math.round(targetSetpoint) + '\u00B0F!');
+        return;
+    } catch (e) { log('GATT write: ' + e.message); }
+
+    // Try GATT write without response
+    try {
+        await chars.setpoint.writeValueWithoutResponse(new DataView(data.buffer));
+        await new Promise(function(r) { setTimeout(r, 1500); });
+        var val = await chars.setpoint.readValue();
+        var sp = decodeFloat(val);
+        if (Math.abs(sp - targetSetpoint) < 5) {
+            log('Setpoint confirmed: ' + Math.round(sp) + '\u00B0F!');
+            return;
+        }
+        log('Setpoint at ' + Math.round(sp) + '. Trying serial...');
+    } catch (e) { log('Write failed: ' + e.message + '. Trying serial...'); }
+
+    // Try serial command
+    if (!chars.serialRx) { log('Serial RX not available'); return; }
+    var body = new Uint8Array([0x00, 0x21].concat(Array.from(data)));
+    var cmd = buildSerialCmd(body);
+    try {
+        await chars.serialRx.writeValueWithoutResponse(new DataView(cmd.buffer));
+        log('Serial cmd sent for ' + Math.round(targetSetpoint) + '\u00B0F');
+    } catch (e) { log('Serial failed: ' + e.message); }
+}
+
+function buildSerialCmd(body) {
+    var sum = 0;
+    for (var i = 0; i < body.length; i++) sum += body[i];
+    var chk = (~sum) & 0xFF;
+    var out = new Uint8Array(body.length + 3);
+    out[0] = 0xDA;
+    out.set(body, 1);
+    out[body.length + 1] = chk;
+    out[body.length + 2] = 0xDB;
+    return out;
+}
+</script>
+</body>
+</html>
