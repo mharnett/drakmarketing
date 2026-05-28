@@ -15,6 +15,29 @@ export interface Tool {
 
 export const tools: Tool[] = [
   {
+    slug: "marketing-suite",
+    name: "MCP Marketing Suite",
+    package: "mcp-marketing-suite",
+    description:
+      "Production-grade collection of MCP servers for performance marketing — Google, Meta, Microsoft, LinkedIn, Reddit, GA4, Search Console, GTM. 124 tools across 8 platforms.",
+    longDescription:
+      "An umbrella project for the full drak MCP marketing stack. Eight production servers — seven on npm, one on PyPI — covering paid media, analytics, and tag management. Built by practitioners running real ad spend. Pick the platforms you actually use; the suite is designed to be additive, not all-or-nothing, with recommended profiles for Google-only, cross-channel, and full-agency context budgets.",
+    platform: "Multi-platform",
+    toolCount: 124,
+    githubRepo: "mharnett/mcp-marketing-suite",
+    npmPackage: "",
+    installCommand: "",
+    features: [
+      "8 production servers across paid media, analytics, and tagging",
+      "124 tools — Google Ads, Meta, Microsoft, LinkedIn, Reddit, GA4, GSC, GTM",
+      "Recommended profiles by context budget",
+      "Project-scoped .mcp.json guidance",
+      "Tool Search support for Claude Code (deferred loading)",
+      "Built by practitioners running real ad spend",
+    ],
+    status: "published",
+  },
+  {
     slug: "google-ads",
     name: "Google Ads MCP",
     package: "mcp-google-ads",
@@ -207,6 +230,27 @@ export const tools: Tool[] = [
       "Geographic and demographic targeting",
     ],
     status: "published",
+  },
+  {
+    slug: "meta-ads-incrementality",
+    name: "Meta Ads Incrementality MCP",
+    package: "mcp-meta-ads-incrementality",
+    description:
+      "Meta Marketing API insights with incrementality as the default attribution window — quantifies the gap vs. 7d-click + 1d-view.",
+    longDescription:
+      "Most agency Meta reports use the default 7-day-click + 1-day-view attribution, which systematically overstates ad impact. This MCP server makes Meta's `incrementality` breakdown the default and lets you ask for the standard windows in the same call to quantify the gap. v0.1.0 — early, with 120+ unit tests covering the incrementality math, attribution-window handling, and Meta SDK request shape. Real-API integration is unverified at this version; recommended against a sandboxed account first.",
+    platform: "Meta Ads",
+    toolCount: 1,
+    githubRepo: "mharnett/mcp-meta-ads-incrementality",
+    npmPackage: "mcp-meta-ads-incrementality",
+    installCommand: "npx mcp-meta-ads-incrementality",
+    features: [
+      "Incrementality as the default attribution window",
+      "Side-by-side comparison vs. 7d-click + 1d-view",
+      "120+ unit tests on the incrementality math and SDK shape",
+      "System User token auth (Business Manager)",
+    ],
+    status: "beta",
   },
 ];
 
