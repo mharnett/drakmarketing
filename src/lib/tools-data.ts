@@ -238,9 +238,9 @@ export const tools: Tool[] = [
     description:
       "Meta Marketing API insights with incrementality as the default attribution window — quantifies the gap vs. 7d-click + 1d-view.",
     longDescription:
-      "Most agency Meta reports use the default 7-day-click + 1-day-view attribution, which systematically overstates ad impact. This MCP server makes Meta's `incrementality` breakdown the default and lets you ask for the standard windows in the same call to quantify the gap. v0.1.0 — early, with 120+ unit tests covering the incrementality math, attribution-window handling, and Meta SDK request shape. Real-API integration is unverified at this version; recommended against a sandboxed account first.",
+      "Most agency Meta reports use the default 7-day-click + 1-day-view attribution, which systematically overstates ad impact. This MCP server makes Meta's `incrementality` breakdown the default and lets you ask for the standard windows in the same call to quantify the gap. v0.2.3 adds a full campaign-build toolset — campaigns, ad sets, ads, creatives, audiences, and lead forms — on top of the incrementality insights, backed by 120+ unit tests covering the incrementality math, attribution-window handling, and Meta SDK request shape. Verify against a sandboxed Business Manager account before production use.",
     platform: "Meta Ads",
-    toolCount: 1,
+    toolCount: 20,
     githubRepo: "mharnett/mcp-meta-ads-incrementality",
     npmPackage: "mcp-meta-ads-incrementality",
     installCommand: "npx mcp-meta-ads-incrementality",
