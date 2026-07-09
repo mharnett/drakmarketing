@@ -38,7 +38,7 @@ const mcps: Array<{
     npm: "https://www.npmjs.com/package/mcp-google-gsc",
   },
   {
-    name: "neon-one-gtm",
+    name: "mcp-gtm-ga4",
     description:
       "List tags, triggers, and variables in Google Tag Manager containers; create GA4 tags; preview and publish container versions.",
     scopes: [
@@ -46,7 +46,7 @@ const mcps: Array<{
       "https://www.googleapis.com/auth/tagmanager.edit.containers",
       "https://www.googleapis.com/auth/tagmanager.publish",
     ],
-    npm: "https://www.npmjs.com/package/neon-one-gtm",
+    npm: "https://www.npmjs.com/package/mcp-gtm-ga4",
   },
 ];
 
