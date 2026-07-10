@@ -4,23 +4,31 @@ import {
   ArrowLeft,
   Check,
   Coffee,
+  Download,
   FileText,
+  Plug,
   Scale,
   Search,
   ShieldCheck,
+  Terminal,
 } from "lucide-react";
 
-// A Stripe Payment Link is a public URL (safe to expose client-side), so the
-// live pay-what-you-want link is the default. Override via Vercel env
-// NEXT_PUBLIC_STRIPE_DONATE_URL (e.g. a test-mode link for preview deploys).
-// Setting it to an empty string hides the button instead of shipping a dead link.
+// Stripe Payment Link (public pay-what-you-want URL). Override via env
+// NEXT_PUBLIC_STRIPE_DONATE_URL; empty string hides the button.
 const DEFAULT_DONATE_URL = "https://donate.stripe.com/7sY7sK0HWgAOfw9dbL1Jm00";
 const envDonateUrl = process.env.NEXT_PUBLIC_STRIPE_DONATE_URL;
 const donateUrl = envDonateUrl === undefined ? DEFAULT_DONATE_URL : envDonateUrl;
 
 const NAME = "Trademark SERP Watch";
 const DESCRIPTION =
-  "A Claude Code skill that finds competitors misusing your brand in search-engine ad copy and prepares a Google Ads trademark complaint — with the evidence and the draft, but never the auto-submit.";
+  "Find competitors misusing your brand in search ads and draft the Google trademark complaint — right inside Claude. Evidence and all; it never auto-submits.";
+
+// Primary path: a claude.ai custom connector (paste a URL, no code/download).
+const CONNECTOR_URL = "https://drak-stack-monorepo-production.up.railway.app/mcp";
+
+// Secondary path: install as a Claude Code skill.
+const INSTALL_CMD = `mkdir -p ~/.claude/skills
+curl -sL https://drakmarketing.com/skills/trademark-serp-watch.tar.gz | tar -xz -C ~/.claude/skills`;
 
 export const metadata: Metadata = {
   title: NAME,
@@ -31,50 +39,46 @@ const steps = [
   {
     icon: Scale,
     title: "Look up the registration",
-    body: "Resolves your brand to its live USPTO trademark registration(s) and surfaces every match — you confirm the one whose class covers your product.",
+    body: "Resolves your brand to its live USPTO registration and surfaces every match — you confirm the right one.",
   },
   {
     icon: Search,
     title: "Sample live search ads",
-    body: "Runs your brand-intent queries against live search results and captures the ads as served — which is the only way to catch a mark inserted via dynamic keyword insertion.",
+    body: "Captures ads as actually served across cities — the only way to catch a mark inserted via keyword insertion.",
   },
   {
     icon: ShieldCheck,
-    title: "Classify against Google's policy",
-    body: "Reads each advertiser's landing page and buckets it: reseller, review/informational, partner, or genuinely competitive. Only unambiguous competitive use is flagged — permitted uses are never treated as violations.",
+    title: "Classify against policy",
+    body: "Reads each landing page and flags only genuine competitive use — reseller, review, and partner ads are left alone.",
   },
   {
     icon: FileText,
     title: "Assemble a reviewed draft",
-    body: "Builds an evidence dossier per candidate — triggering term, screenshot, landing page, and the registration to cite — pre-filled into Google's complaint form for you to review and submit.",
+    body: "Builds an evidence dossier + a pre-filled Google complaint for you to review and submit.",
   },
 ];
 
 const features = [
   "USPTO registration lookup — never auto-picks the wrong mark",
-  "Live SERP capture that catches dynamic-keyword-insertion of your brand",
-  "Conservative policy classifier — won't flag permitted reseller / review / partner ads",
-  "Per-candidate evidence dossier with screenshot and triggering term",
-  "Pre-filled Google Ads complaint package for human review",
-  "Free to run — no API key or account setup on your end",
+  "Live SERP capture that catches keyword-inserted brand mentions",
+  "Conservative classifier — won't flag reseller / review / partner ads",
+  "Per-candidate evidence dossier with screenshot and trigger term",
+  "Pre-filled Google Ads complaint for human review",
+  "Free to run — no API key or setup",
 ];
 
 const faqs = [
   {
-    q: "Does a competitor using my brand in their ad mean they're infringing?",
-    a: "Not by itself. Google lets anyone bid on a competitor's trademarked keyword, and it permits the trademark in ad text for resellers, review/informational sites, and partners. Only competitive use — the mark used to divert to a rival product — violates policy, and that turns on the landing page. This tool classifies the landing page instead of matching a string, so it won't push you to file on a permitted use.",
+    q: "Does a competitor using my brand in their ad mean infringement?",
+    a: "Not by itself. Google allows the trademark in ad text for resellers, reviews, and partners — only competitive use violates policy, and that turns on the landing page. The tool classifies the page, so it won't push you to file on a permitted use.",
   },
   {
     q: "Will it submit the complaint for me?",
-    a: "No — by design. Google's complaint is a good-faith-belief legal attestation filed under the trademark owner's identity, and Google requires a human at the owner to complete an authorization step. The skill stops at a reviewed, pre-filled draft that you submit.",
+    a: "No, by design. The complaint is a legal attestation filed under the owner's identity, and Google requires a human to confirm. The skill stops at a reviewed, pre-filled draft.",
   },
   {
     q: "What do I need to run it?",
-    a: "Just Claude Code. The skill calls a free, hosted search service, so there's no API key or account setup on your end. (Power users can plug in their own SerpAPI key to run unthrottled.)",
-  },
-  {
-    q: "Is it free?",
-    a: "Yes — free to use, no key required. The searches behind each run cost a little, and those costs are covered by tips. If it saves you time, chipping in below keeps it running for everyone.",
+    a: "Claude Code. It calls a free hosted search service — no API key or setup. Power users can plug in their own SerpAPI key.",
   },
 ];
 
@@ -106,18 +110,8 @@ const schemaData = [
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Tools",
-        item: "https://drakmarketing.com/tools",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: NAME,
-        item: "https://drakmarketing.com/tools/trademark-serp-watch",
-      },
+      { "@type": "ListItem", position: 1, name: "Tools", item: "https://drakmarketing.com/tools" },
+      { "@type": "ListItem", position: 2, name: NAME, item: "https://drakmarketing.com/tools/trademark-serp-watch" },
     ],
   },
 ];
@@ -137,18 +131,85 @@ export default function TrademarkSerpWatchPage() {
         All tools
       </Link>
 
-      <div className="mb-10">
+      <div className="mb-8">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center rounded-full border border-border px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
-            Claude Code skill
+            Claude connector
           </span>
           <span className="inline-flex items-center rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
             Beta
           </span>
         </div>
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{NAME}</h1>
-        <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+        <p className="mt-3 text-lg leading-relaxed text-muted-foreground">
           {DESCRIPTION}
+        </p>
+      </div>
+
+      {/* Get started — connector first (above the fold) */}
+      <div className="mb-6 rounded-xl border border-border bg-muted/40 p-6 sm:p-7">
+        <div className="flex items-center gap-2">
+          <Plug className="h-4 w-4 text-primary" />
+          <h2 className="text-lg font-semibold">Add it to Claude — paste one URL</h2>
+        </div>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Works in claude.ai (Free → Enterprise) and Cowork. No code, no download.
+        </p>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-background px-4 py-3 font-mono text-xs leading-relaxed">
+          {CONNECTOR_URL}
+        </pre>
+        <ol className="mt-4 space-y-1.5 text-sm text-muted-foreground">
+          <li>
+            <span className="font-medium text-foreground">1.</span> claude.ai →
+            Settings → Connectors → <span className="text-foreground">Add custom connector</span>
+          </li>
+          <li>
+            <span className="font-medium text-foreground">2.</span> Paste the URL
+            above → Add (leave the auth fields blank)
+          </li>
+          <li>
+            <span className="font-medium text-foreground">3.</span> In any chat, ask:{" "}
+            <span className="italic">
+              &ldquo;check if competitors are misusing my trademark &lsquo;Neon
+              One&rsquo; in search ads&rdquo;
+            </span>
+          </li>
+        </ol>
+      </div>
+
+      {/* Secondary — Claude Code */}
+      <div className="mb-12 rounded-lg border border-border p-5">
+        <div className="flex items-center gap-2">
+          <Terminal className="h-4 w-4 text-muted-foreground" />
+          <h3 className="text-sm font-semibold">
+            Prefer Claude Code? Install the skill locally
+          </h3>
+        </div>
+        <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-background px-4 py-3 font-mono text-xs leading-relaxed">
+          {INSTALL_CMD}
+        </pre>
+        <div className="mt-3 flex flex-wrap gap-3">
+          <a
+            href="/skills/trademark-serp-watch.tar.gz"
+            download
+            className="inline-flex items-center gap-2 rounded-md border border-border px-3.5 py-1.5 text-sm font-medium transition-colors hover:bg-muted"
+          >
+            <Download className="h-4 w-4" />
+            Download skill
+          </a>
+          <a
+            href="/skills/trademark-serp-watch-SKILL.md"
+            download
+            className="inline-flex items-center gap-2 rounded-md border border-border px-3.5 py-1.5 text-sm font-medium transition-colors hover:bg-muted"
+          >
+            <FileText className="h-4 w-4" />
+            SKILL.md
+          </a>
+        </div>
+        <p className="mt-3 text-xs text-muted-foreground">
+          Lands in{" "}
+          <code className="font-mono">~/.claude/skills/trademark-serp-watch/</code>,
+          loads on next start.
         </p>
       </div>
 
@@ -159,10 +220,7 @@ export default function TrademarkSerpWatchPage() {
         </h2>
         <ol className="grid gap-4 sm:grid-cols-2">
           {steps.map((s, i) => (
-            <li
-              key={s.title}
-              className="rounded-lg border border-border p-5"
-            >
+            <li key={s.title} className="rounded-lg border border-border p-5">
               <div className="mb-2 flex items-center gap-2">
                 <s.icon className="h-4 w-4 text-primary" />
                 <span className="text-xs font-medium text-muted-foreground">
@@ -197,13 +255,8 @@ export default function TrademarkSerpWatchPage() {
       <div className="mb-12 rounded-xl border border-border bg-muted/40 p-6 sm:p-8">
         <h2 className="text-lg font-semibold">Buy back your coffee break ☕</h2>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
-          This does in a couple of minutes what used to be an afternoon of
-          scrolling through search results. It&apos;s free to run — no key, no
-          setup — but each run does quietly rack up a little search cost on my
-          end. If it just handed you an extended coffee break, feel free to leave
-          a commensurate tip — enough for a cortado, or the whole café, entirely
-          your call. Tips cover those search costs and keep it current with
-          Google&apos;s policy changes.
+          Free to run — but each run quietly racks up a little search cost on my
+          end. If it saved you an afternoon, buy me a coffee.
         </p>
         {donateUrl ? (
           <a
@@ -213,7 +266,7 @@ export default function TrademarkSerpWatchPage() {
             className="mt-5 inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
           >
             <Coffee className="h-4 w-4" />
-            Leave a tip
+            $6.33 tip
           </a>
         ) : (
           <p className="mt-5 inline-flex items-center gap-2 rounded-md border border-dashed border-border px-5 py-2.5 text-sm text-muted-foreground">
@@ -225,9 +278,7 @@ export default function TrademarkSerpWatchPage() {
 
       {/* FAQ */}
       <div className="border-t border-border pt-10">
-        <h2 className="mb-6 text-lg font-semibold">
-          Frequently Asked Questions
-        </h2>
+        <h2 className="mb-6 text-lg font-semibold">Frequently Asked Questions</h2>
         <div className="space-y-6">
           {faqs.map((f) => (
             <div key={f.q}>
