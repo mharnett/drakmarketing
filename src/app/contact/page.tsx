@@ -50,8 +50,15 @@ export default function ContactPage() {
         }}
         className="mt-8 space-y-5"
       >
-        {/* Honeypot for spam prevention */}
-        <input type="text" name="_honey" className="hidden" />
+        {/* Honeypot for spam prevention — real users never see or tab to this */}
+        <input
+          type="text"
+          name="_honey"
+          className="hidden"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+        />
         {/* Disable captcha redirect */}
         <input type="hidden" name="_captcha" value="false" />
 
@@ -94,6 +101,22 @@ export default function ContactPage() {
             required
             rows={5}
             placeholder="Tell us about your project or question..."
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="context"
+            className="mb-1.5 block text-sm font-medium"
+          >
+            Are you running paid ads now?{" "}
+            <span className="font-normal text-muted-foreground">
+              (optional)
+            </span>
+          </label>
+          <Input
+            id="context"
+            name="context"
+            placeholder="e.g. Google Ads, ~$10k/mo, managing bids by hand"
           />
         </div>
         <button
