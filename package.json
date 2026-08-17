@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test src/**/*.test.ts",
+    "test": "node --test src/**/*.test.ts scripts/**/*.test.ts",
     "sync:linkedin": "npx tsx scripts/sync-linkedin-posts.ts",
     "linkedin:auth": "npx tsx scripts/linkedin-oauth.ts"
   },

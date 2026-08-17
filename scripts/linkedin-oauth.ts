@@ -15,16 +15,15 @@
 import { execSync } from "child_process";
 import { createServer } from "http";
 import { URL } from "url";
+import { keychainGet } from "./lib/keychain";
 
 const PORT = 3456;
 const REDIRECT_URI = `http://localhost:${PORT}/callback`;
 const SCOPES = "r_member_social w_member_social openid profile";
+const KEYCHAIN_ACCOUNT = "drak-posts";
 
 function keychain(service: string): string {
-  return execSync(
-    `security find-generic-password -a drak-posts -s ${service} -w`,
-    { encoding: "utf-8" },
-  ).trim();
+  return keychainGet(service, KEYCHAIN_ACCOUNT);
 }
 
 function keychainSet(service: string, value: string): void {

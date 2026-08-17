@@ -17,15 +17,14 @@ import { execSync } from "child_process";
 import { writeFileSync, existsSync, readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+import { keychainGet } from "./lib/keychain";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = join(__dirname, "..");
+const KEYCHAIN_ACCOUNT = "drak-posts";
 
 function keychain(service: string): string {
-  return execSync(
-    `security find-generic-password -a drak-posts -s ${service} -w`,
-    { encoding: "utf-8" },
-  ).trim();
+  return keychainGet(service, KEYCHAIN_ACCOUNT);
 }
 
 function keychainSet(service: string, value: string): void {
