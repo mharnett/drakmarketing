@@ -9,11 +9,11 @@
 - Website: https://drakmarketing.com
 
 ## MCP Marketing Suite
-A collection of 8 open-source MCP servers with 124+ tools:
+A collection of 8 open-source MCP servers with 169+ tools:
 
-- **mcp-google-ads** (35 tools): Google Ads API with MCC support, GAQL queries, safe-by-default
-- **mcp-linkedin-ads** (65+ tools): LinkedIn Campaign Manager, multi-account, targeting, creatives
-- **mcp-bing-ads** (30+ tools): Microsoft Advertising, quality scores, bid automation
+- **mcp-google-ads** (77 tools): Google Ads API with MCC support, GAQL queries, safe-by-default
+- **mcp-linkedin-ads** (7 tools): LinkedIn Campaign Manager reporting, read-only, multi-account
+- **mcp-bing-ads** (13 tools): Microsoft Advertising, quality scores, shared negatives, budgets and bids
 - **mcp-ga4** (9 tools): Google Analytics 4, historical + realtime reports, custom dimensions
 - **mcp-google-gsc** (4 tools): Google Search Console, search analytics, URL inspection
 - **mcp-gtm-ga4** (13 tools): Google Tag Manager + GA4, consent auditing, sandbox safety
