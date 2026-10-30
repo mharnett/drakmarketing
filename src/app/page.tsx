@@ -86,7 +86,7 @@ export default async function Home() {
               <span className="text-[oklch(0.72_0.14_75)]">$</span> npx mcp-google-ads
             </code>
             <code className="block text-sm font-mono text-white/40 mt-1">
-              Google Ads MCP server running — 35 tools available
+              Google Ads MCP server running — {tools.find((t) => t.slug === "google-ads")?.toolCount} tools available
             </code>
           </div>
         </div>
