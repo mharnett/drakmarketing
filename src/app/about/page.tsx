@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { totalToolCount } from "@/lib/tools-data";
 
 export const metadata: Metadata = {
   title: "About",
@@ -57,7 +58,7 @@ export default function AboutPage() {
           <strong className="text-foreground">8 MCP servers</strong> covering
           Google Ads, LinkedIn, Bing, Meta, Reddit, GA4, Search Console, and
           Google Tag Manager — over{" "}
-          <strong className="text-foreground">124 tools</strong> that anyone can
+          <strong className="text-foreground">{totalToolCount} tools</strong> that anyone can
           install with a single command.
         </p>
         <p>

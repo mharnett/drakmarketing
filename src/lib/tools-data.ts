@@ -13,40 +13,41 @@ export interface Tool {
   status: "published" | "beta" | "coming-soon";
 }
 
-export const tools: Tool[] = [
-  {
+const suite = (count: number): Tool => ({
     slug: "marketing-suite",
     name: "MCP Marketing Suite",
     package: "mcp-marketing-suite",
     description:
-      "Production-grade collection of MCP servers for performance marketing — Google, Meta, Microsoft, LinkedIn, Reddit, GA4, Search Console, GTM. 124 tools across 8 platforms.",
+      `Production-grade collection of MCP servers for performance marketing — Google, Meta, Microsoft, LinkedIn, Reddit, GA4, Search Console, GTM. ${count} tools across 8 platforms.`,
     longDescription:
       "An umbrella project for the full drak MCP marketing stack. Eight production servers — seven on npm, one on PyPI — covering paid media, analytics, and tag management. Built by practitioners running real ad spend. Pick the platforms you actually use; the suite is designed to be additive, not all-or-nothing, with recommended profiles for Google-only, cross-channel, and full-agency context budgets.",
     platform: "Multi-platform",
-    toolCount: 124,
+    toolCount: count,
     githubRepo: "mharnett/mcp-marketing-suite",
     npmPackage: "",
     installCommand: "",
     features: [
       "8 production servers across paid media, analytics, and tagging",
-      "124 tools — Google Ads, Meta, Microsoft, LinkedIn, Reddit, GA4, GSC, GTM",
+      `${count} tools — Google Ads, Meta, Microsoft, LinkedIn, Reddit, GA4, GSC, GTM`,
       "Recommended profiles by context budget",
       "Project-scoped .mcp.json guidance",
       "Tool Search support for Claude Code (deferred loading)",
       "Built by practitioners running real ad spend",
     ],
     status: "published",
-  },
+});
+
+const servers: Tool[] = [
   {
     slug: "google-ads",
     name: "Google Ads MCP",
     package: "mcp-google-ads",
     description:
-      "MCP server for Google Ads API with MCC support, 35 tools for campaign management, and built-in safeguards.",
+      "MCP server for Google Ads API with MCC support, 77 tools for campaign management, and built-in safeguards.",
     longDescription:
       "A production-grade MCP server for Google Ads with full Multi-Client Center (MCC) support. Manage campaigns, ad groups, keywords, and ads across multiple accounts. Safe-by-default — all creates are PAUSED, with an approval workflow for destructive actions. Supports GAQL queries for custom reporting.",
     platform: "Google Ads",
-    toolCount: 35,
+    toolCount: 77,
     githubRepo: "mharnett/mcp-google-ads",
     npmPackage: "mcp-google-ads",
     installCommand: "npx mcp-google-ads",
@@ -59,6 +60,10 @@ export const tools: Tool[] = [
       "Approval workflow for destructive actions",
       "Campaign budget management",
       "Search term reports and insights",
+      "Budget magnitude ceiling and stale-value guard on writes",
+      "Required reason and audit log on bidding overrides",
+      "Never attaches a lead form unless explicitly asked",
+      "Keyword labelling and ad-group asset linking",
     ],
     status: "published",
   },
@@ -67,23 +72,21 @@ export const tools: Tool[] = [
     name: "LinkedIn Ads MCP",
     package: "mcp-linkedin-ads",
     description:
-      "65+ tools for LinkedIn Campaign Manager with multi-account management, proven across 65+ active campaigns.",
+      "7 read-only tools for LinkedIn Campaign Manager reporting across multiple ad accounts, proven across 65+ active campaigns.",
     longDescription:
-      "The most comprehensive MCP server for LinkedIn advertising. Full CRUD for campaigns, ads, and creatives with advanced targeting by demographics, job titles, companies, and locations. Budget and bid optimization, audience insights, and conversion tracking — all through a single MCP interface.",
+      "A read-only MCP server for LinkedIn advertising reporting. List ad accounts, campaign groups, and campaigns, and pull campaign-, account-, and pivot-level analytics across multiple accounts — all through a single MCP interface. It never changes anything in Campaign Manager.",
     platform: "LinkedIn Ads",
-    toolCount: 65,
+    toolCount: 7,
     githubRepo: "mharnett/mcp-linkedin-ads",
     npmPackage: "mcp-linkedin-ads",
     installCommand: "npx mcp-linkedin-ads",
     features: [
-      "65+ tools for full campaign management",
-      "Multi-account management",
-      "Demographic and job title targeting",
-      "Company and location targeting",
-      "Budget and bid optimization",
-      "Creative management and A/B testing",
-      "Conversion tracking setup",
-      "Audience insights and reporting",
+      "Read-only: never changes Campaign Manager",
+      "Multi-account support",
+      "Account, campaign group, and campaign listing",
+      "Campaign and account performance reports",
+      "Flexible analytics by pivot and date range",
+      "Per-client context detection",
     ],
     status: "published",
   },
@@ -92,22 +95,22 @@ export const tools: Tool[] = [
     name: "Bing Ads MCP",
     package: "mcp-bing-ads",
     description:
-      "30+ tools for Microsoft Advertising — campaign management, quality scores, shared negatives, and bid automation.",
+      "13 tools for Microsoft Advertising — performance and quality score reporting, shared negative lists, budgets, and bids.",
     longDescription:
-      "A comprehensive MCP server for Microsoft Advertising (Bing Ads). Manage campaigns, ad groups, and keywords with quality score reporting, shared negative keyword management, and bid automation. The first open-source Bing Ads MCP server available.",
+      "An MCP server for Microsoft Advertising (Bing Ads). Report on campaigns, keywords, and search terms with quality scores, manage shared negative keyword lists, pause keywords, and update campaign budgets and ad group CPC bids. The first open-source Bing Ads MCP server available.",
     platform: "Microsoft Advertising",
-    toolCount: 30,
+    toolCount: 13,
     githubRepo: "mharnett/mcp-bing-ads",
     npmPackage: "mcp-bing-ads",
     installCommand: "npx mcp-bing-ads",
     features: [
-      "Campaign, ad group, and keyword management",
-      "Quality score reporting",
-      "Shared negative keyword management",
-      "Bid automation and optimization",
+      "Campaign and ad group listing",
+      "Keyword performance with quality score",
+      "Shared negative keyword lists",
+      "Ad group CPC bid updates",
       "Search term reports",
-      "Performance analysis and reporting",
-      "Budget management",
+      "Keyword pausing",
+      "Campaign budget updates",
       "First open-source Bing Ads MCP",
     ],
     status: "published",
@@ -254,7 +257,10 @@ export const tools: Tool[] = [
   },
 ];
 
-export const totalToolCount = tools.reduce((sum, t) => sum + t.toolCount, 0);
+/** Sum over the individual servers; the suite bundles them, so it is not added again. */
+export const totalToolCount = servers.reduce((sum, t) => sum + t.toolCount, 0);
+
+export const tools: Tool[] = [suite(totalToolCount), ...servers];
 export const publishedCount = tools.filter(
   (t) => t.status === "published"
 ).length;

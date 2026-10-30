@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
+import { totalToolCount } from "@/lib/tools-data";
 import "./globals.css";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s | Drak Marketing",
   },
   description:
-    "Open-source MCP servers for Google Ads, LinkedIn Ads, Bing Ads, GA4, and more. 124+ tools built by marketers, for marketers. Free to install and use.",
+    `Open-source MCP servers for Google Ads, LinkedIn Ads, Bing Ads, GA4, and more. ${totalToolCount}+ tools built by marketers, for marketers. Free to install and use.`,
   metadataBase: new URL("https://drakmarketing.com"),
   openGraph: {
     type: "website",
@@ -63,7 +64,7 @@ export default function RootLayout({
               name: "Drak Marketing",
               url: "https://drakmarketing.com",
               description:
-                "Open-source MCP servers for marketing automation. 124+ tools for Google Ads, LinkedIn Ads, Bing Ads, GA4, and more.",
+                `Open-source MCP servers for marketing automation. ${totalToolCount}+ tools for Google Ads, LinkedIn Ads, Bing Ads, GA4, and more.`,
               founder: {
                 "@type": "Person",
                 name: "Mark Harnett",
