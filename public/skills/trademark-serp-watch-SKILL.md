@@ -36,7 +36,7 @@ See `references/google-tm-policy.md`.
 
 - Brand / trademark term (required).
 - Owner legal name + owner domains (to exclude the owner's own ads).
-- Any known example the user already saw (e.g. "Wild Apricot on 'neon one
+- Any known example the user already saw (e.g. "Competitor X on 'acme
   reviews'") — add it as an `--extra` query to seed capture.
 - Geos (default: United States).
 - A SERP provider API key (bring-your-own; see below).
@@ -54,8 +54,8 @@ See `references/google-tm-policy.md`.
      parses the results and, **only on an EXACT owner-name match**, auto-selects
      that mark and prefills its registration number — then confirms
      registered/live status against USPTO TSDR. This is safe because it cannot
-     select a same-named mark owned by a *different* company (e.g. a "NEON ONE"
-     owned by International Data Group is skipped). Anything ambiguous (no match,
+     select a same-named mark owned by a *different* company (e.g. an "ACME"
+     owned by an unrelated company is skipped). Anything ambiguous (no match,
      or several) falls back to human selection.
    - Still confirm the **class** covers the goods/services, and that the mark
      term matches the term actually misused in the ads. `--no-open` prints the
