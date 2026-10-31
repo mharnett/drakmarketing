@@ -35,7 +35,7 @@ export default function ContactPage() {
       </p>
 
       <form
-        action="https://formsubmit.co/mark@drakmarketing.com"
+        action="https://formsubmit.co/hello@drakmarketing.com"
         method="POST"
         onSubmit={(e) => {
           e.preventDefault();
@@ -131,10 +131,10 @@ export default function ContactPage() {
         <p className="text-sm text-muted-foreground">
           Or email directly:{" "}
           <a
-            href="mailto:mark@drakmarketing.com"
+            href="mailto:hello@drakmarketing.com"
             className="font-medium text-foreground hover:underline"
           >
-            mark@drakmarketing.com
+            hello@drakmarketing.com
           </a>
         </p>
       </div>

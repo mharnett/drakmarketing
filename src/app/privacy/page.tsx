@@ -167,10 +167,10 @@ export default function PrivacyPage() {
             You may request access to, correction of, or deletion of your
             personal data by contacting us at{" "}
             <a
-              href="mailto:mark@drakmarketing.com"
+              href="mailto:hello@drakmarketing.com"
               className="font-medium text-foreground hover:underline"
             >
-              mark@drakmarketing.com
+              hello@drakmarketing.com
             </a>
             .
           </p>
@@ -193,10 +193,10 @@ export default function PrivacyPage() {
           <p>
             Questions about this policy? Email{" "}
             <a
-              href="mailto:mark@drakmarketing.com"
+              href="mailto:hello@drakmarketing.com"
               className="font-medium text-foreground hover:underline"
             >
-              mark@drakmarketing.com
+              hello@drakmarketing.com
             </a>
             .
           </p>

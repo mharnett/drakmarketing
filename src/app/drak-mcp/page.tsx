@@ -182,10 +182,10 @@ export default function DrakMcpPage() {
           <p>
             Questions about drak-mcp, security concerns, or verification requests? Email{" "}
             <a
-              href="mailto:mark@drakmarketing.com"
+              href="mailto:hello@drakmarketing.com"
               className="font-medium text-foreground hover:underline"
             >
-              mark@drakmarketing.com
+              hello@drakmarketing.com
             </a>
             .
           </p>

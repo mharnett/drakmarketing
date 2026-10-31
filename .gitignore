@@ -41,3 +41,6 @@ yarn-error.log*
 next-env.d.ts
 __pycache__/
 scratch/designdoc_preview.png
+
+# local working files, never published
+scratch/

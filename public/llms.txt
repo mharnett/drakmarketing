@@ -25,5 +25,5 @@ All npm-published tools install with: npx <package-name>
 No build step or configuration files required.
 
 ## Contact
-- Email: mark@drakmarketing.com
+- Email: hello@drakmarketing.com
 - GitHub: https://github.com/mharnett
