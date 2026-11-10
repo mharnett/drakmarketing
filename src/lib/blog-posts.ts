@@ -9,6 +9,45 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "status-filters-hide-spend",
+    title: "Your Ads Report Is Missing Spend From Campaigns You Paused",
+    date: "2026-11-12",
+    author: "Mark Harnett",
+    excerpt:
+      "Filtering performance data on status = ENABLED quietly drops anything paused or removed since, along with the spend it had during the range. Google just added a warning about it to their official Google Ads MCP.",
+    content: `Google merged a fix of mine into their official Google Ads MCP this week, the same day I opened it. adloop fixed the same bug in their tool the week before.
+
+It's a small change. It's also a mistake I find in almost every ads tool and a lot of hand-written reports.
+
+## The problem
+
+When you pull performance for a date range, it's natural to add a status filter. Show me enabled campaigns. Or at least leave out removed ones.
+
+Status is today's value, though. Not the value during the range.
+
+Say a campaign spent 4,000 in the first half of the month and was removed mid-month. A month-to-date report filtered on "not removed" leaves out that 4,000 and every conversion it drove. CPA looks better than it was. The total doesn't match billing. And nothing errors, so nobody notices.
+
+![An October spend report loses 4,000 of 16,000 when the query filters on campaign status](/images/blog/status-filter.mp4)
+
+## Why agents make it worse
+
+An agent writing queries copies what it has seen. A lot of example queries filter on status, so a lot of agent-written performance queries do too. Then it explains the low number with total confidence.
+
+The official Google Ads MCP gives agents a page of hints before they write a query: date formats, limits, customer IDs. It now has one more: don't filter historical metrics on status. If you want removed campaigns with no activity out of the way, drop the zero-impression rows after the query.
+
+## The other fix
+
+adloop is an open-source Google Ads tool for AI agents. Their maintainer asked me to go further than I'd proposed and fix it in every report, including Performance Max, with tests for a removed campaign that still had spend. That was the right call.
+
+## Check your own reports
+
+If your numbers don't match billing, look for a status filter on a date-ranged query first. It's the most common reason I see.
+
+- [Google's PR](https://github.com/googleads/google-ads-mcp/pull/146)
+- [adloop's PR](https://github.com/kLOsk/adloop/pull/128)
+- [The rule: PMG-004](https://github.com/mharnett/paid-media-agent-guardrails/blob/main/rules/PMG-004-dont-filter-history-on-status.md)`,
+  },
+  {
     slug: "dont-decide-from-one-week",
     title: "Don't Make Ad Decisions From One Week of Data",
     date: "2026-11-10",
