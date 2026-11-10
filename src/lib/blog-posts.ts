@@ -27,7 +27,7 @@ Status is today's value, though. Not the value during the range.
 
 Say a campaign spent 4,000 in the first half of the month and was removed mid-month. A month-to-date report filtered on "not removed" leaves out that 4,000 and every conversion it drove. CPA looks better than it was. The total doesn't match billing. And nothing errors, so nobody notices.
 
-![An October spend report loses 4,000 of 16,000 when the query filters on campaign status](/images/blog/status-filter.mp4)
+![Switching the campaign status filter from Enabled to All adds 4,000 of October spend from paused and removed campaigns](/images/blog/status-filter.mp4)
 
 ## Why agents make it worse
 
