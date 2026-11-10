@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { allBlogPosts, formatDate } from "@/lib/blog-posts";
+import { parseImageBlock, renderInlineMarkdown } from "@/lib/blog-markdown";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -51,6 +52,13 @@ export default async function BlogPostPage({ params }: Props) {
 
       <div className="prose prose-neutral max-w-none text-sm leading-relaxed [&_h2]:text-base [&_h2]:font-semibold [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:mb-4 [&_p]:text-muted-foreground [&_strong]:text-foreground [&_ul]:text-muted-foreground [&_li]:mb-1">
         {post.content.split("\n\n").map((block, i) => {
+          const image = parseImageBlock(block);
+          if (image) {
+            return (
+              // eslint-disable-next-line @next/next/no-img-element -- static SVG chart; it adapts to dark mode itself
+              <img key={i} src={image.src} alt={image.alt} className="my-6 w-full rounded-md border" />
+            );
+          }
           if (block.startsWith("## ")) {
             return (
               <h2 key={i}>{block.replace("## ", "")}</h2>
@@ -67,7 +75,7 @@ export default async function BlogPostPage({ params }: Props) {
             return (
               <ul key={i}>
                 {block.split("\n").map((item, j) => (
-                  <li key={j}>{item.replace("- ", "")}</li>
+                  <li key={j} dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(item.replace("- ", "")) }} />
                 ))}
               </ul>
             );
@@ -84,10 +92,4 @@ export default async function BlogPostPage({ params }: Props) {
       </div>
     </article>
   );
-}
-
-function renderInlineMarkdown(text: string): string {
-  return text
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\*(.+?)\*/g, "<em>$1</em>");
 }

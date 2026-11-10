@@ -9,6 +9,52 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "dont-decide-from-one-week",
+    title: "Don't Make Ad Decisions From One Week of Data",
+    date: "2026-11-10",
+    author: "Mark Harnett",
+    excerpt:
+      "CPA moves 20-30% week to week on most accounts with nothing wrong. If your agent (or your analyst) compares this week to last week, it's mostly reacting to noise.",
+    content: `I got a PR merged into Corey Haines' marketing skills repo this week. It's one of the most used collections of marketing skills for AI agents, around 60k stars on GitHub, and Corey merges outside fixes fast. That's a big part of why it's good.
+
+The fix was small. It's also the mistake I see most often, from agents and from people.
+
+## The problem
+
+The ads skill has a weekly "operating check". It tells the agent to hold steady if a change is inside normal variance. That's the right instinct.
+
+It just didn't say what normal variance was. So an agent falls back to the easy comparison: this week vs last week.
+
+On most accounts CPA and conversions move 20-30% week to week with nothing wrong. Auctions shift, a holiday lands, conversions show up late. Compare one week to the one before and you get a new "fix this" every Monday. The next Monday the number swings back and the agent reverses itself.
+
+## What I do instead
+
+I look at the trailing 6-8 weeks first.
+
+Say CPA ran between 80 and 115 over the last 8 weeks. This week it's 105, up 25% on last week's 84. Week over week that looks like an alarm. Against the 8-week range it's a normal week, and the right call is to leave it alone.
+
+![Same week, two verdicts: CPA up 25% on last week, but inside the 8-week range](/images/blog/one-week-cpa.svg)
+
+If this week is outside that range, then it's worth digging in.
+
+The exceptions are facts, not trends. Overspend, broken tracking, a landing page that's down, a disapproved ad. Those you fix right away, no baseline needed.
+
+## Why this matters more with agents
+
+A person who over-reacts to one bad week does it once a week. An agent running on a schedule does it every time it runs, across every account, and it writes a confident explanation each time. The baseline has to be in the instructions, because the agent won't add it on its own.
+
+The PR adds that baseline to the skill, plus a test case for a bad week that's actually inside the normal range.
+
+## The write-up
+
+I keep these rules written up in one place, with the pattern to search for and the fix that's been merged:
+
+- [The PR](https://github.com/coreyhaines31/marketingskills/pull/945)
+- [The rule: PMG-003](https://github.com/mharnett/paid-media-agent-guardrails/blob/main/rules/PMG-003-dont-decide-from-one-week.md)
+
+If you're letting an agent make budget or bid calls, it's worth checking which comparison it's using. Happy to take a look if you want a second set of eyes.`,
+  },
+  {
     slug: "unleashing-potential-ad-reels",
     title:
       "Unleashing the Potential of Ad Reels in Digital Marketing: Captivating, Digestible, and Relatable",

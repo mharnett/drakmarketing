@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img"
+ aria-labelledby="t d">
+<title id="t">Same week, two verdicts</title>
+<desc id="d">Hypothetical weekly CPA for 10 weeks. This week is 105, up 25% on last week's 84, which looks like an alarm.
+The previous 8 weeks ranged from 80 to 115, so 105 is inside the normal range and the right call is to hold.</desc>
+<style>
+  svg { --surface:#fcfcfb; --ink:#0b0b0b; --ink2:#52514e; --muted:#8a8984; --grid:#e7e6e2; --series:#2a78d6;
+        font-family: Geist, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  @media (prefers-color-scheme: dark) {
+    svg { --surface:#1a1a19; --ink:#f0efec; --ink2:#c3c2b7; --muted:#8f8e86; --grid:#34332f; --series:#3987e5; }
+  }
+  .bg { fill: var(--surface); }
+  .grid { stroke: var(--grid); stroke-width: 1; }
+  .axis { fill: var(--muted); font-size: 15px; }
+  .band { fill: var(--series); fill-opacity: .13; }
+  .bandedge { stroke: var(--series); stroke-opacity: .45; stroke-width: 1; stroke-dasharray: 4 4; }
+  .line { fill: none; stroke: var(--series); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+  .dot { fill: var(--series); stroke: var(--surface); stroke-width: 2; }
+  .bracket { fill: none; stroke: var(--ink2); stroke-width: 1.5; }
+  .title { fill: var(--ink); font-size: 32px; font-weight: 700; }
+  .sub { fill: var(--ink2); font-size: 17px; }
+  .lbl { fill: var(--ink2); font-size: 15px; }
+  .val { fill: var(--ink); font-size: 17px; font-weight: 600; }
+  .vhead { fill: var(--muted); font-size: 14px; font-weight: 600; letter-spacing: .06em; }
+  .vbig { fill: var(--ink); font-size: 24px; font-weight: 700; }
+  .vtxt { fill: var(--ink2); font-size: 16px; }
+  .rule { stroke: var(--grid); stroke-width: 1; }
+</style>
+<rect class="bg" width="1200" height="675"/>
+<text class="title" x="56" y="58">Same week, two verdicts</text>
+<text class="sub" x="56" y="90">Weekly CPA, hypothetical account</text>
+
+<line class="grid" x1="96" x2="838" y1="516.4" y2="516.4"/><text class="axis" x="82" y="521.4" text-anchor="end">80</text><line class="grid" x1="96" x2="838" y1="433.1" y2="433.1"/><text class="axis" x="82" y="438.1" text-anchor="end">90</text><line class="grid" x1="96" x2="838" y1="349.8" y2="349.8"/><text class="axis" x="82" y="354.8" text-anchor="end">100</text><line class="grid" x1="96" x2="838" y1="266.6" y2="266.6"/><text class="axis" x="82" y="271.6" text-anchor="end">110</text><line class="grid" x1="96" x2="838" y1="183.3" y2="183.3"/><text class="axis" x="82" y="188.3" text-anchor="end">120</text>
+<rect class="band" x="176.4" y="224.9" width="661.6" height="291.4"/>
+<line class="bandedge" x1="176.4" x2="838.0" y1="224.9" y2="224.9"/>
+<line class="bandedge" x1="176.4" x2="838.0" y1="516.4" y2="516.4"/>
+<text class="lbl" x="184.4" y="214.9">Normal range over the last 8 weeks: 80 to 115</text>
+<text class="axis" x="96.0" y="613" text-anchor="middle">Wk 1</text><text class="axis" x="176.4" y="613" text-anchor="middle">Wk 2</text><text class="axis" x="256.9" y="613" text-anchor="middle">Wk 3</text><text class="axis" x="337.3" y="613" text-anchor="middle">Wk 4</text><text class="axis" x="417.8" y="613" text-anchor="middle">Wk 5</text><text class="axis" x="498.2" y="613" text-anchor="middle">Wk 6</text><text class="axis" x="578.7" y="613" text-anchor="middle">Wk 7</text><text class="axis" x="659.1" y="613" text-anchor="middle">Wk 8</text><text class="axis" x="739.6" y="613" text-anchor="middle">Wk 9</text><text class="axis" x="820.0" y="613" text-anchor="middle">This week</text>
+
+<polyline class="line" points="96.0,366.5 176.4,391.5 256.9,249.9 337.3,516.4 417.8,316.5 498.2,224.9 578.7,424.8 659.1,341.5 739.6,483.1 820.0,308.2"/>
+<circle class="dot" cx="739.6" cy="483.1" r="5"/>
+<circle class="dot" cx="820.0" cy="308.2" r="6.5"/>
+<text class="val" x="727.6" y="489.1" text-anchor="end">84</text>
+<text class="val" x="820.0" y="292.2" text-anchor="middle">105</text>
+
+<path class="bracket" d="M840.0,483.1 H846.0 V308.2 H840.0"/>
+<line class="bracket" x1="747.6" x2="840.0" y1="483.1" y2="483.1" stroke-dasharray="3 4"/>
+<text class="val" x="856.0" y="401.6">+25%</text>
+
+<line class="rule" x1="920" x2="920" y1="140" y2="583"/>
+<text class="vhead" x="944" y="164">VS LAST WEEK</text>
+<text class="vbig" x="944" y="200">+25%. Looks like</text>
+<text class="vbig" x="944" y="230">an alarm.</text>
+<text class="vtxt" x="944" y="258">So you change something.</text>
+
+<text class="vhead" x="944" y="340">VS THE LAST 8 WEEKS</text>
+<text class="vbig" x="944" y="376">Inside the range.</text>
+<text class="vbig" x="944" y="406">Hold.</text>
+<text class="vtxt" x="944" y="434">It's a normal week.</text>
+</svg>
