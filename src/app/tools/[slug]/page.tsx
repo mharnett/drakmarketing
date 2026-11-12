@@ -171,6 +171,47 @@ export default async function ToolPage({ params }: Props) {
         </ul>
       </div>
 
+      {/* Comparison */}
+      {tool.comparison && (
+        <div className="mb-10">
+          <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground mb-4">
+            How it compares
+          </h2>
+          <div className="overflow-x-auto rounded-md border border-border">
+            <table className="w-full text-sm">
+              <thead className="bg-muted/50 text-left">
+                <tr>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    <span className="sr-only">Feature</span>
+                  </th>
+                  {tool.comparison.columns.map((c) => (
+                    <th key={c} scope="col" className="px-3 py-2 font-medium">
+                      {c}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {tool.comparison.rows.map((r) => (
+                  <tr key={r.label} className="border-t border-border align-top">
+                    <th scope="row" className="px-3 py-2 text-left font-medium">
+                      {r.label}
+                    </th>
+                    <td className="px-3 py-2 text-muted-foreground">{r.official}</td>
+                    <td className="px-3 py-2">{r.ours}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {tool.comparison.footnote && (
+            <p className="mt-3 text-xs text-muted-foreground">
+              {tool.comparison.footnote}
+            </p>
+          )}
+        </div>
+      )}
+
       {/* Links */}
       <div className="flex flex-wrap gap-3">
         {tool.githubRepo && (
