@@ -8,11 +8,11 @@ const bySlug = (slug: string) => {
   return t!;
 };
 
-// Counted from each repo's src/tools.ts on 2026-10-30 (mcp-google-ads 1.12.0,
-// mcp-linkedin-ads 1.1.4, mcp-bing-ads 1.3.1).
+// Counted from each repo's src/tools.ts: Google on 2026-11-12 (main @ 34c6e2f);
+// LinkedIn npm 1.2.0 on 2026-11-12; Bing (1.3.2) on 2026-10-30.
 test("Google, LinkedIn and Bing tool counts match the published servers", () => {
-  assert.equal(bySlug("google-ads").toolCount, 77);
-  assert.equal(bySlug("linkedin-ads").toolCount, 7);
+  assert.equal(bySlug("google-ads").toolCount, 85);
+  assert.equal(bySlug("linkedin-ads").toolCount, 11);
   assert.equal(bySlug("bing-ads").toolCount, 13);
 });
 
@@ -95,4 +95,28 @@ test("every comparison row has two short, filled cells", () => {
 test("only the four ad-platform pages carry a comparison", () => {
   const withComparison = tools.filter((t) => t.comparison).map((t) => t.slug).sort();
   assert.deepEqual(withComparison, ["bing-ads", "google-ads", "linkedin-ads", "meta-ads-incrementality"]);
+});
+
+test("llms.txt per-server counts match tools-data", async () => {
+  const { readFile } = await import("node:fs/promises");
+  const text = await readFile(new URL("../../public/llms.txt", import.meta.url), "utf8");
+  for (const t of tools.filter((x) => x.npmPackage)) {
+    const m = text.match(new RegExp(`\\*\\*${t.package}\\*\\* \\((\\d+) tools\\)`));
+    if (m) assert.equal(Number(m[1]), t.toolCount, `${t.package} in llms.txt`);
+  }
+});
+
+test("llms.txt headline total matches the summed tool count", async () => {
+  const { readFile } = await import("node:fs/promises");
+  const text = await readFile(new URL("../../public/llms.txt", import.meta.url), "utf8");
+  const m = text.match(/MCP servers with (\d+)\+? tools/);
+  assert.ok(m, "llms.txt headline total not found");
+  assert.equal(Number(m![1]), totalToolCount);
+});
+
+test("LinkedIn copy reflects 1.2.0's guarded lookalike writes", () => {
+  const t = bySlug("linkedin-ads");
+  const copy = [t.description, t.longDescription, ...t.features, ...t.comparison!.rows.map((r) => r.ours)].join(" ");
+  assert.doesNotMatch(copy, /\b7 (read-only )?tools\b|never changes (anything in )?Campaign Manager/);
+  assert.match(copy, /lookalike/i);
 });
