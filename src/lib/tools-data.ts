@@ -50,11 +50,11 @@ const servers: Tool[] = [
     name: "Google Ads MCP",
     package: "mcp-google-ads",
     description:
-      "MCP server for Google Ads API with MCC support, 77 tools for campaign management, and built-in safeguards.",
+      "MCP server for Google Ads API with MCC support, 85 tools for campaign management, and built-in safeguards.",
     longDescription:
       "A production-grade MCP server for Google Ads with full Multi-Client Center (MCC) support. Manage campaigns, ad groups, keywords, and ads across multiple accounts. Safe-by-default — all creates are PAUSED, with an approval workflow for destructive actions. Supports GAQL queries for custom reporting.",
     platform: "Google Ads",
-    toolCount: 77,
+    toolCount: 85,
     githubRepo: "mharnett/mcp-google-ads",
     npmPackage: "mcp-google-ads",
     installCommand: "npx mcp-google-ads",
@@ -131,16 +131,17 @@ const servers: Tool[] = [
     name: "LinkedIn Ads MCP",
     package: "mcp-linkedin-ads",
     description:
-      "7 read-only tools for LinkedIn Campaign Manager reporting across multiple ad accounts, proven across 65+ active campaigns.",
+      "11 tools for LinkedIn Campaign Manager reporting and predictive (lookalike) audiences across multiple ad accounts, proven across 65+ active campaigns.",
     longDescription:
-      "A read-only MCP server for LinkedIn advertising reporting. List ad accounts, campaign groups, and campaigns, and pull campaign-, account-, and pivot-level analytics across multiple accounts — all through a single MCP interface. It never changes anything in Campaign Manager.",
+      "An MCP server for LinkedIn advertising reporting and predictive (lookalike) audiences. List ad accounts, campaign groups, and campaigns, and pull campaign-, account-, and pivot-level analytics across multiple accounts — all through a single MCP interface. Reporting is read-only; the two lookalike write tools stay off unless you enable them, and each write confirms the account, supports a dry run, and reads the result back.",
     platform: "LinkedIn Ads",
-    toolCount: 7,
+    toolCount: 11,
     githubRepo: "mharnett/mcp-linkedin-ads",
     npmPackage: "mcp-linkedin-ads",
     installCommand: "npx mcp-linkedin-ads",
     features: [
-      "Read-only: never changes Campaign Manager",
+      "Read-only reporting; lookalike writes off unless enabled",
+      "Create, update and list predictive (lookalike) audiences",
       "Multi-account support",
       "Account, campaign group, and campaign listing",
       "Campaign and account performance reports",
@@ -168,7 +169,7 @@ const servers: Tool[] = [
         {
           label: "Writes",
           official: "Campaigns, creatives and audiences, through your own code",
-          ours: "None; read-only, never changes Campaign Manager",
+          ours: "Predictive (lookalike) audiences only; off unless enabled, with dry run and read-back",
         },
         {
           label: "Reporting and pivots",
@@ -193,7 +194,7 @@ const servers: Tool[] = [
         {
           label: "Best for",
           official: "Building your own app",
-          ours: "LinkedIn Ads reporting from an AI assistant across several accounts",
+          ours: "LinkedIn Ads reporting and lookalike audiences from an AI assistant across several accounts",
         },
       ],
       footnote:
