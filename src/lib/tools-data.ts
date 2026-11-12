@@ -72,6 +72,58 @@ const servers: Tool[] = [
       "Never attaches a lead form unless explicitly asked",
       "Keyword labelling and ad-group asset linking",
     ],
+    comparison: {
+      columns: ["Google's official Google Ads MCP", "Google Ads MCP"],
+      rows: [
+        {
+          label: "Publisher and status",
+          official: "Google; open source (Apache-2.0), pre-1.0",
+          ours: "Drak Marketing; open source (MIT), on npm",
+        },
+        {
+          label: "Reads",
+          official: "GAQL search, field metadata, accessible customers",
+          ours: "GAQL plus keyword, ad, search term, Keyword Planner and experiment reports",
+        },
+        {
+          label: "Writes",
+          official: "Assets, YouTube video uploads and labels only",
+          ours: "Campaigns, ad groups, ads, keywords, negatives, budgets, bidding, targeting, experiments",
+        },
+        {
+          label: "Write safety",
+          official: "Dry run first; committing needs the same parameters plus a checksum",
+          ours: "Writes off unless enabled; new objects land paused; \u00b120% budget and bid ceiling; lead-form guard",
+        },
+        {
+          label: "Query language",
+          official: "GAQL built from structured parameters",
+          ours: "Raw GAQL, plus purpose-built report tools",
+        },
+        {
+          label: "Multi-account (MCC)",
+          official: "Manager login ID per call or as a default",
+          ours: "Manager login in config; picks the client account from the working folder",
+        },
+        {
+          label: "Sign-in",
+          official: "Application Default Credentials or OAuth",
+          ours: "OAuth refresh token plus developer token",
+        },
+        {
+          label: "Hosting",
+          official: "Local (Python), or self-hosted over HTTP, Docker or Cloud Run",
+          ours: "Local (Node.js)",
+        },
+        {
+          label: "Best for",
+          official: "Analysis and asset/label upkeep on Google-maintained code",
+          ours: "Day-to-day campaign changes through an AI assistant, with guardrails",
+        },
+      ],
+      footnote:
+        "Comparison as of November 2026, based on Google's google-ads-mcp repository and Google Ads API documentation.",
+    },
     status: "published",
   },
   {
@@ -95,6 +147,58 @@ const servers: Tool[] = [
       "Flexible analytics by pivot and date range",
       "Per-client context detection",
     ],
+    comparison: {
+      columns: ["LinkedIn Marketing API (no official MCP)", "LinkedIn Ads MCP"],
+      rows: [
+        {
+          label: "Publisher and status",
+          official: "No MCP from LinkedIn or Microsoft; only the Marketing API",
+          ours: "Drak Marketing; open source (MIT), on npm and in the official MCP Registry",
+        },
+        {
+          label: "What you get",
+          official: "A REST API to build your own integration on",
+          ours: "Ready-made tools for any MCP-compatible AI assistant",
+        },
+        {
+          label: "Reads",
+          official: "Full API read access, depending on your access tier",
+          ours: "Ad accounts, campaign groups, campaigns, performance and analytics",
+        },
+        {
+          label: "Writes",
+          official: "Campaigns, creatives and audiences, through your own code",
+          ours: "None; read-only, never changes Campaign Manager",
+        },
+        {
+          label: "Reporting and pivots",
+          official: "Analytics endpoint with pivots and time granularity",
+          ours: "Pivots such as campaign, creative, company size, industry, seniority, job function, country",
+        },
+        {
+          label: "Multi-account",
+          official: "Every ad account the signed-in member can reach",
+          ours: "Several accounts in config; per-call account ID or matched by working folder",
+        },
+        {
+          label: "Sign-in",
+          official: "Developer app, Advertising API approval and OAuth 2.0",
+          ours: "Your own app's OAuth credentials; refresh token rotated automatically",
+        },
+        {
+          label: "Coverage beyond reporting",
+          official: "Conversions API, Lead Sync, Media Planning, Company Intelligence",
+          ours: "Frequency (impressions \u00f7 reach) added to reports",
+        },
+        {
+          label: "Best for",
+          official: "Building your own app",
+          ours: "LinkedIn Ads reporting from an AI assistant across several accounts",
+        },
+      ],
+      footnote:
+        "LinkedIn has not published an MCP server as of November 2026, so this compares against building on its Marketing API directly.",
+    },
     status: "published",
   },
   {
@@ -120,6 +224,63 @@ const servers: Tool[] = [
       "Campaign budget updates",
       "First open-source Bing Ads MCP",
     ],
+    comparison: {
+      columns: ["Microsoft's official Advertising MCP", "Bing Ads MCP"],
+      rows: [
+        {
+          label: "Publisher and status",
+          official: "Microsoft; open pilot, read-only",
+          ours: "Drak Marketing; open source (MIT), on npm",
+        },
+        {
+          label: "Reads",
+          official: "Accounts, campaigns, ad groups, ads, keywords, Performance Max asset groups, assets, audiences",
+          ours: "Campaigns, ad groups, campaign/keyword/search term reports, shared negative lists",
+        },
+        {
+          label: "Writes",
+          official: "None",
+          ours: "Pause keywords, set campaign budgets, set ad group max CPC, add shared negatives",
+        },
+        {
+          label: "Write safety",
+          official: "Not applicable (read-only)",
+          ours: "Writes off unless enabled; account ID required; budgets and bids read back after writing",
+        },
+        {
+          label: "Reporting",
+          official: "Metrics on entity calls (spend, ROAS, CPA, top-impression rate); preset date ranges",
+          ours: "Campaign, keyword (with Quality Score) and search term reports; any date range",
+        },
+        {
+          label: "Multi-account",
+          official: "Lists every account you can access",
+          ours: "Accounts set in a local config; picked by ID or working folder",
+        },
+        {
+          label: "Sign-in",
+          official: "Microsoft account sign-in",
+          ours: "Your own Azure app, developer token and refresh token",
+        },
+        {
+          label: "Hosting",
+          official: "Hosted by Microsoft; nothing to install",
+          ours: "Local (Node.js)",
+        },
+        {
+          label: "Notable extras",
+          official: "180-day change history, Performance Max and audience data",
+          ours: "Search terms, Quality Score, shared negative list audits",
+        },
+        {
+          label: "Best for",
+          official: "Read-only analysis with no install",
+          ours: "Analysis plus a few guarded edits",
+        },
+      ],
+      footnote:
+        "Comparison as of November 2026, based on Microsoft Advertising's MCP documentation.",
+    },
     status: "published",
   },
   {

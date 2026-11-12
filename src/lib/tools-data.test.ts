@@ -65,7 +65,34 @@ test("Meta incrementality page carries a comparison against Meta's official MCP"
   assert.match(c!.footnote ?? "", /November 2026/);
 });
 
-test("no other tool page carries a comparison", () => {
-  const withComparison = tools.filter((t) => t.comparison).map((t) => t.slug);
-  assert.deepEqual(withComparison, ["meta-ads-incrementality"]);
+test("Google, Microsoft and LinkedIn pages carry comparisons against the platform's own offering", () => {
+  const expected: Record<string, string> = {
+    "google-ads": "Google's official Google Ads MCP",
+    "bing-ads": "Microsoft's official Advertising MCP",
+    "linkedin-ads": "LinkedIn Marketing API (no official MCP)",
+  };
+  for (const [slug, first] of Object.entries(expected)) {
+    const c = bySlug(slug).comparison;
+    assert.ok(c, `expected a comparison on ${slug}`);
+    assert.equal(c!.columns[0], first, `${slug} first column`);
+    assert.equal(c!.columns[1], bySlug(slug).name, `${slug} second column is the tool's own name`);
+    assert.ok(c!.rows.length >= 8, `${slug} has at least 8 rows`);
+    assert.match(c!.footnote ?? "", /November 2026/, `${slug} footnote is dated`);
+  }
+});
+
+test("every comparison row has two short, filled cells", () => {
+  for (const t of tools.filter((x) => x.comparison)) {
+    for (const r of t.comparison!.rows) {
+      for (const cell of [r.official, r.ours]) {
+        assert.ok(cell.trim(), `${t.slug} / ${r.label} has an empty cell`);
+        assert.ok(cell.length <= 120, `${t.slug} / ${r.label} cell is over 120 chars`);
+      }
+    }
+  }
+});
+
+test("only the four ad-platform pages carry a comparison", () => {
+  const withComparison = tools.filter((t) => t.comparison).map((t) => t.slug).sort();
+  assert.deepEqual(withComparison, ["bing-ads", "google-ads", "linkedin-ads", "meta-ads-incrementality"]);
 });
