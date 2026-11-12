@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { parseImageBlock, renderInlineMarkdown } from "./blog-markdown.ts";
+import { isVideoSrc, parseImageBlock, renderInlineMarkdown } from "./blog-markdown.ts";
 import { blogPosts } from "./blog-posts.ts";
 
 test("renderInlineMarkdown keeps bold and italic", () => {
@@ -55,4 +55,33 @@ test("dont-decide-from-one-week uses the exact +25% example and its chart file e
   assert.equal(images.length, 1);
   assert.equal(images[0].src, "/images/blog/one-week-cpa.svg");
   assert.ok(existsSync(join(process.cwd(), "public", images[0].src)), "chart file missing from public/");
+});
+
+test("isVideoSrc is true only for mp4 sources", () => {
+  assert.equal(isVideoSrc("/images/blog/x.mp4"), true);
+  assert.equal(isVideoSrc("/images/blog/x.svg"), false);
+  assert.equal(isVideoSrc("/images/blog/x.mp4.png"), false);
+});
+
+test("status-filters-hide-spend post is dated for Thursday and embeds its video", () => {
+  const post = blogPosts.find((p) => p.slug === "status-filters-hide-spend");
+  assert.ok(post, "expected the status-filters-hide-spend post");
+  assert.equal(post!.title, "Your Ads Report Is Missing Spend From Campaigns You Paused");
+  assert.equal(post!.date, "2026-11-12");
+  assert.equal(post!.author, "Mark Harnett");
+  const media = post!.content
+    .split("\n\n")
+    .map(parseImageBlock)
+    .filter((m): m is { alt: string; src: string } => m !== null);
+  assert.equal(media.length, 1);
+  assert.equal(media[0].src, "/images/blog/status-filter.mp4");
+  assert.ok(isVideoSrc(media[0].src));
+  assert.ok(existsSync(join(process.cwd(), "public", media[0].src)), "video missing from public/");
+  for (const href of [
+    "https://github.com/googleads/google-ads-mcp/pull/146",
+    "https://github.com/kLOsk/adloop/pull/128",
+    "https://github.com/mharnett/paid-media-agent-guardrails/blob/main/rules/PMG-004-dont-filter-history-on-status.md",
+  ]) {
+    assert.ok(post!.content.includes(`](${href})`), `missing link ${href}`);
+  }
 });

@@ -17,3 +17,8 @@ export function parseImageBlock(block: string): { alt: string; src: string } | n
   if (!m || !SITE_PATH.test(m[2])) return null;
   return { alt: m[1], src: m[2] };
 }
+
+/** True when a media block's source is a video the page should play rather than show as an image. */
+export function isVideoSrc(src: string): boolean {
+  return /\.mp4$/i.test(src);
+}
