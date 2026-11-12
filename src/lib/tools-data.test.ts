@@ -39,3 +39,33 @@ test("pages and llms.txt carry no stale hardcoded tool counts", async () => {
     assert.doesNotMatch(text, /\b124\+? tools\b|\b35 tools available\b|\((35|65\+|30\+) tools\)/, f);
   }
 });
+
+test("Meta incrementality page carries a comparison against Meta's official MCP", () => {
+  const c = bySlug("meta-ads-incrementality").comparison;
+  assert.ok(c, "expected a comparison on meta-ads-incrementality");
+  assert.deepEqual(c!.columns, ["Meta's official Ads MCP", "Meta Ads Incrementality MCP"]);
+  assert.deepEqual(
+    c!.rows.map((r) => r.label),
+    [
+      "Default conversion number",
+      "Incrementality",
+      "Inflation math",
+      "Cost per acquisition (CPA)",
+      "Experiments",
+      "Building and editing",
+      "Write safety",
+      "Catalog, signals and research",
+      "Sign-in",
+      "Best for",
+    ],
+  );
+  for (const r of c!.rows) {
+    assert.ok(r.official.trim() && r.ours.trim(), `row "${r.label}" has both cells`);
+  }
+  assert.match(c!.footnote ?? "", /November 2026/);
+});
+
+test("no other tool page carries a comparison", () => {
+  const withComparison = tools.filter((t) => t.comparison).map((t) => t.slug);
+  assert.deepEqual(withComparison, ["meta-ads-incrementality"]);
+});

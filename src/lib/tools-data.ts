@@ -11,6 +11,13 @@ export interface Tool {
   installCommand: string;
   features: string[];
   status: "published" | "beta" | "coming-soon";
+  comparison?: Comparison;
+}
+
+export interface Comparison {
+  columns: [string, string];
+  rows: { label: string; official: string; ours: string }[];
+  footnote?: string;
 }
 
 const suite = (count: number): Tool => ({
@@ -254,6 +261,63 @@ const servers: Tool[] = [
       "System User token auth (Business Manager)",
     ],
     status: "beta",
+    comparison: {
+      columns: ["Meta's official Ads MCP", "Meta Ads Incrementality MCP"],
+      rows: [
+        {
+          label: "Default conversion number",
+          official: "Meta's standard attributed conversions",
+          ours: "Meta's modeled incremental conversions",
+        },
+        {
+          label: "Incrementality",
+          official: "Conversion Lift studies: a randomized holdout you set up in advance",
+          ours: "Meta's incrementality estimate on every report, by default",
+        },
+        {
+          label: "Inflation math",
+          official: "None",
+          ours: "Built in: reported vs. incremental conversions, inflation factor, % overstated",
+        },
+        {
+          label: "Cost per acquisition (CPA)",
+          official: "Cost per result over time, plus industry benchmarks",
+          ours: "CPA for each attribution window, side by side",
+        },
+        {
+          label: "Experiments",
+          official: "A/B tests and Conversion Lift studies",
+          ours: "None yet (Conversion Lift is on the roadmap)",
+        },
+        {
+          label: "Building and editing",
+          official: "Campaigns, ad sets, ads, creatives, custom audiences, Instagram post boosts",
+          ours: "Campaigns, ad sets, ads, creatives, audiences, lookalikes, lead forms, budgets, pause/activate",
+        },
+        {
+          label: "Write safety",
+          official: "New campaigns, ad sets and ads land paused; your AI client confirms before activating",
+          ours: "Writes off unless enabled; new objects land paused; dry-run previews on edits; naming checks on renames",
+        },
+        {
+          label: "Catalog, signals and research",
+          official: "Product catalogs, pixel and Conversions API signal health, Ad Library search",
+          ours: "None",
+        },
+        {
+          label: "Sign-in",
+          official: "OAuth through Facebook Login for Business",
+          ours: "Meta access token (System User token recommended)",
+        },
+        {
+          label: "Best for",
+          official: "Running the account",
+          ours: "Judging the account: reports where the causal number leads",
+        },
+      ],
+      footnote:
+        "Comparison as of November 2026, based on Meta's developer documentation. I run both: Meta's to operate the account, this one to evaluate it.",
+    },
   },
 ];
 
