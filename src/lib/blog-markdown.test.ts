@@ -85,3 +85,34 @@ test("status-filters-hide-spend post is dated for Thursday and embeds its video"
     assert.ok(post!.content.includes(`](${href})`), `missing link ${href}`);
   }
 });
+
+test("split-brand-search-in-mmm post is dated for Monday, explains MMM and carries its links", () => {
+  const post = blogPosts.find((p) => p.slug === "split-brand-search-in-mmm");
+  assert.ok(post, "expected the split-brand-search-in-mmm post");
+  assert.equal(post!.title, "Putting My Paid Search Mistakes Into Other People's Tools");
+  assert.equal(post!.date, "2026-11-16");
+  assert.equal(post!.author, "Mark Harnett");
+  assert.ok(post!.excerpt.length > 0 && post!.excerpt.length <= 220, "excerpt missing or too long");
+  // It is the newest post, so it leads the blog index.
+  assert.equal(blogPosts[0].slug, "split-brand-search-in-mmm");
+  // The intro sections a marketer new to modeling needs, in order.
+  const headings = post!.content.split("\n\n").filter((b) => b.startsWith("## "));
+  assert.deepEqual(headings, [
+    "## What a marketing mix model is",
+    "## The problem",
+    "## What the model does with it",
+    "## The fix",
+    "## Why I'm doing this",
+  ]);
+  assert.ok(post!.content.includes("A marketing mix model (MMM)"), "MMM must be spelled out on first use");
+  for (const href of [
+    "https://github.com/pymc-labs/pymc-marketing/pull/3338",
+    "https://github.com/mharnett/paid-media-agent-guardrails/blob/main/rules/PMG-016-split-brand-search-in-mmm.md",
+    "https://github.com/mharnett/paid-media-agent-guardrails",
+  ]) {
+    assert.ok(post!.content.includes(`](${href})`), `missing link ${href}`);
+  }
+  // Mark's voice: no em dashes. The page has no code-block renderer, so no indented blocks either.
+  assert.equal((post!.content.match(/—/g) || []).length, 0);
+  assert.equal(post!.content.split("\n\n").filter((b) => b.startsWith("    ")).length, 0);
+});
