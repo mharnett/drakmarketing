@@ -9,6 +9,71 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "split-brand-search-in-mmm",
+    title: "Putting My Paid Search Mistakes Into Other People's Tools",
+    date: "2026-11-16",
+    author: "Mark Harnett",
+    excerpt:
+      "I've spent years encoding paid media rules into my own tools. Now I'm putting them into the open source tools other marketers use. The latest: PyMC-Marketing's docs now split brand from non-brand search.",
+    content: `I've run paid search for a long time. Most of what I know is rules I learned by getting it wrong first. Don't blend brand and non-brand. Don't make a call off one week of data. Don't filter history on today's status.
+
+I've built a lot of tools to hold those rules, mostly so I stop relearning them.
+
+Lately I've found a better outlet. A lot of marketers now do their work through open source tools and AI agents, and those tools make the same mistakes I used to. So I've started fixing them at the source. This week it was PyMC-Marketing.
+
+## What a marketing mix model is
+
+A marketing mix model (MMM) takes your history of spend and sales and estimates how much each channel actually drove. TV, search, social, display, all at once.
+
+Companies use it for the big question: where should next year's budget go? Most models come with an optimizer that answers it for you.
+
+PyMC-Marketing is one of the main open source libraries for building one. A lot of teams start from its example notebooks, so whatever the examples do tends to end up in real models.
+
+## The problem
+
+The notebook that loads ad platform data groups spend by platform. So every Google Ads campaign lands in one channel, brand and non-brand search together.
+
+That's the natural way to do it. It's also how most hand-built models I see are set up. One line called "search".
+
+Brand and non-brand are pretty different things, though.
+
+Non-brand search buys demand you wouldn't otherwise reach. Spend goes up when you raise bids or budget. That's a media input.
+
+Brand search mostly catches people who were already looking for you. Spend goes up when more people search your name, usually because of something else you ran. That's closer to an outcome than an input.
+
+## What the model does with it
+
+Say a TV flight lifts brand searches 40%. Brand search spend rises with it, because there are more searches to show up on.
+
+The model sees search spend and sales going up in the same weeks. Search gets the credit. TV's estimated effect shrinks.
+
+Then the optimizer does what it's told and moves money out of TV and into search. Which mostly buys clicks you were going to get anyway.
+
+I learned this one in ad accounts, years before I touched a model. Blended brand and non-brand ROAS makes search look great in a report. A model makes the same mistake look more scientific.
+
+## The fix
+
+Split them before the data goes in. Tag every Google Ads campaign as brand or non-brand, and give the model two channels where it had one. A rule on campaign names is usually enough.
+
+The notebook now has that step, and the loader's docs say brand and non-brand usually belong in separate channels. Juan Orduz, one of the maintainers, invited the PR and merged it the next day. Thanks Juan.
+
+I'd probably go one step further and leave brand search out of the media inputs altogether. At minimum it shouldn't share a column with non-brand.
+
+## Why I'm doing this
+
+That's 7 fixes merged into 6 open source marketing tools so far, including Google's official Google Ads MCP and Corey Haines' marketing skills.
+
+None of them are clever. Each one is a rule I learned the hard way, written into a tool other marketers rely on. A rule in my own tools helps my clients. The same rule in PyMC-Marketing helps everyone who copies that notebook.
+
+I keep the rules written up in one place, each with a pattern you can search your own code for. I have a long list left.
+
+If you maintain a marketing tool and want a second pair of eyes on the paid media logic, happy to look.
+
+- [The PR](https://github.com/pymc-labs/pymc-marketing/pull/3338)
+- [The rule: PMG-016](https://github.com/mharnett/paid-media-agent-guardrails/blob/main/rules/PMG-016-split-brand-search-in-mmm.md)
+- [All the rules](https://github.com/mharnett/paid-media-agent-guardrails)`,
+  },
+  {
     slug: "status-filters-hide-spend",
     title: "Your Ads Report Is Missing Spend From Campaigns You Paused",
     date: "2026-11-12",
