@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { allBlogPosts, formatDate } from "@/lib/blog-posts";
 import { isVideoSrc, parseImageBlock, renderInlineMarkdown } from "@/lib/blog-markdown";
+import { blogPostMetadata, blogPostingJsonLd, extractFaqs, faqPageJsonLd } from "@/lib/blog-seo";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -17,19 +18,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = allBlogPosts.find((p) => p.slug === slug);
   if (!post) return {};
-  return {
-    title: post.title,
-    description: post.excerpt,
-  };
+  return blogPostMetadata(post);
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = allBlogPosts.find((p) => p.slug === slug);
   if (!post) notFound();
+  const faqLd = faqPageJsonLd(extractFaqs(post.content));
 
   return (
     <article className="mx-auto max-w-2xl px-6 py-16 md:py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd(post)) }}
+      />
+      {faqLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+        />
+      )}
       <Link
         href="/blog"
         className="mb-8 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
@@ -46,11 +55,14 @@ export default async function BlogPostPage({ params }: Props) {
           {post.title}
         </h1>
         <p className="mt-3 text-sm text-muted-foreground">
-          By {post.author}
+          By{" "}
+          <Link href="/about" rel="author" className="underline underline-offset-2 hover:text-foreground">
+            {post.author}
+          </Link>
         </p>
       </header>
 
-      <div className="prose prose-neutral max-w-none text-sm leading-relaxed [&_h2]:text-base [&_h2]:font-semibold [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:mb-4 [&_p]:text-muted-foreground [&_strong]:text-foreground [&_ul]:text-muted-foreground [&_li]:mb-1">
+      <div className="prose prose-neutral max-w-none text-sm leading-relaxed [&_h2]:text-base [&_h2]:font-semibold [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:text-sm [&_h3]:font-semibold [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:mb-4 [&_p]:text-muted-foreground [&_strong]:text-foreground [&_ul]:text-muted-foreground [&_li]:mb-1">
         {post.content.split("\n\n").map((block, i) => {
           const image = parseImageBlock(block);
           if (image && isVideoSrc(image.src)) {
@@ -74,6 +86,9 @@ export default async function BlogPostPage({ params }: Props) {
               // eslint-disable-next-line @next/next/no-img-element -- static SVG chart; it adapts to dark mode itself
               <img key={i} src={image.src} alt={image.alt} className="my-6 w-full rounded-md border" />
             );
+          }
+          if (block.startsWith("### ")) {
+            return <h3 key={i}>{block.slice(4)}</h3>;
           }
           if (block.startsWith("## ")) {
             return (
