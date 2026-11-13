@@ -20,6 +20,10 @@ A collection of 8 open-source MCP servers with 201 tools:
 - **mcp-reddit-ads** (18 tools): Reddit Ads API v3, targeting, safe-by-default
 - **meta-ads-mcp** (28+ tools): Meta (Facebook/Instagram) advertising
 
+## Blog
+- Index: https://drakmarketing.com/blog
+- Posts by Mark Harnett on paid media measurement, open-source marketing tools and AI agents. Full list: https://drakmarketing.com/sitemap.xml
+
 ## Installation
 All npm-published tools install with: npx <package-name>
 No build step or configuration files required.
