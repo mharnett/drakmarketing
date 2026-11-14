@@ -4,6 +4,7 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { isVideoSrc, parseImageBlock, renderInlineMarkdown } from "./blog-markdown.ts";
 import { blogPosts } from "./blog-posts.ts";
+import { extractFaqs } from "./blog-seo.ts";
 
 test("renderInlineMarkdown keeps bold and italic", () => {
   assert.equal(renderInlineMarkdown("a **b** *c*"), "a <strong>b</strong> <em>c</em>");
@@ -98,12 +99,42 @@ test("split-brand-search-in-mmm post is dated for Monday, explains MMM and carri
   // The intro sections a marketer new to modeling needs, in order.
   const headings = post!.content.split("\n\n").filter((b) => b.startsWith("## "));
   assert.deepEqual(headings, [
-    "## What a marketing mix model is",
-    "## The problem",
-    "## What the model does with it",
-    "## The fix",
-    "## Why I'm doing this",
+    "## What is a marketing mix model?",
+    "## What is wrong with one search channel?",
+    "## What does the model do with it?",
+    "## How do you fix it?",
+    "## Why am I putting these rules into open source tools?",
+    "## FAQ",
   ]);
+  // AEO shape: a direct answer before the first heading, and FAQ entries that become FAQPage schema.
+  const firstBlock = post!.content.split("\n\n")[0];
+  assert.ok(firstBlock.startsWith("**Short answer:**"), "lead with a direct answer");
+  assert.ok(firstBlock.includes("PyMC-Marketing") && firstBlock.includes("brand search"), "name the entities up top");
+  const faqs = extractFaqs(post!.content);
+  assert.equal(faqs.length, 3, "FAQ holds only follow-ups the body does not answer");
+  const words = (t: string) => t.trim().split(/\s+/).length;
+  for (const f of faqs) {
+    assert.ok(f.question.endsWith("?"), `FAQ question: ${f.question}`);
+    assert.ok(words(f.answer) >= 35 && words(f.answer) <= 50, `FAQ answer ${words(f.answer)} words: ${f.question}`);
+  }
+  // FAQ questions are ones a reader would type, not insider terms from the post.
+  for (const f of faqs) assert.ok(!/PMG-|PyMC|notebook/i.test(f.question), `insider FAQ question: ${f.question}`);
+  // First-party incrementality read from one client account, anonymized: no client names.
+  for (const n of ["40%", "168", "166", "not a controlled test"]) assert.ok(post!.content.includes(n), `missing ${n}`);
+  assert.ok(!post!.content.includes("43%"), "spend-share range was replaced by the incrementality point");
+  assert.ok(post!.content.split("\n\n")[0].includes("40%"), "incrementality point leads the post");
+  assert.ok(faqs.some((f) => f.question === "Does brand search spend drive sales?"), "FAQ answers the incrementality question");
+  assert.ok(!/forcepoint|neon/i.test(post!.content.replace(/paid-media-agent-guardrails/g, "")), "no client names");
+  // Key takeaways: a labeled block, then five bullets.
+  const blocks = post!.content.split("\n\n");
+  assert.equal(blocks[1], "**Key takeaways**");
+  assert.equal(blocks[2].split("\n").filter((l) => l.startsWith("- ")).length, 5);
+  // Each section opens with a 40-60 word direct answer.
+  const sections = post!.content.split(/\n(?=## )/).slice(1).filter((x) => !x.startsWith("## FAQ"));
+  for (const sec of sections) {
+    const first = sec.split("\n\n")[1];
+    assert.ok(words(first) >= 40 && words(first) <= 60, `${sec.split("\n")[0]}: opening answer is ${words(first)} words`);
+  }
   assert.ok(post!.content.includes("A marketing mix model (MMM)"), "MMM must be spelled out on first use");
   for (const href of [
     "https://github.com/pymc-labs/pymc-marketing/pull/3338",

@@ -15,21 +15,33 @@ export const blogPosts: BlogPost[] = [
     author: "Mark Harnett",
     excerpt:
       "I've spent years encoding paid media rules into my own tools. Now I'm putting them into the open source tools other marketers use. The latest: PyMC-Marketing's docs now split brand from non-brand search.",
-    content: `I've run paid search for a long time. Most of what I know is rules I learned by getting it wrong first. Don't blend brand and non-brand. Don't make a call off one week of data. Don't filter history on today's status.
+    content: `**Short answer:** Brand search spend mostly doesn't cause the sales it gets credit for. In one account I manage, cutting brand spend about 40% twice left brand leads flat. So in a marketing mix model (MMM), brand and non-brand search should be separate channels. I fixed this in the docs for PyMC-Marketing, a widely used open source MMM library.
+
+**Key takeaways**
+
+- Brand search and non-brand search behave differently, so an MMM should model them as separate channels.
+- Brand search spend mostly doesn't cause the sales it is credited with. It is closer to an outcome than an input.
+- In one account I manage, cutting brand spend about 40% twice left brand leads flat.
+- One blended "search" channel makes search look better and TV, social and display look worse.
+- The PyMC-Marketing example notebook and loader docs now split the two. The rule is PMG-016 in the paid-media-agent-guardrails repo.
+
+I've run paid search for a long time. Most of what I know is rules I learned by getting it wrong first. Don't blend brand and non-brand. Don't make a call off one week of data. Don't filter history on today's status.
 
 I've built a lot of tools to hold those rules, mostly so I stop relearning them.
 
 Lately I've found a better outlet. A lot of marketers now do their work through open source tools and AI agents, and those tools make the same mistakes I used to. So I've started fixing them at the source. This week it was PyMC-Marketing.
 
-## What a marketing mix model is
+## What is a marketing mix model?
 
-A marketing mix model (MMM) takes your history of spend and sales and estimates how much each channel actually drove. TV, search, social, display, all at once.
+A marketing mix model (MMM) takes your history of spend and sales and estimates how much each channel actually drove: TV, search, social and display, all at once. Teams use the result to decide where next year's budget should go, and most models include an optimizer that proposes the split.
 
-Companies use it for the big question: where should next year's budget go? Most models come with an optimizer that answers it for you.
+PyMC-Marketing is one of the main open source Python libraries for building one, maintained by PyMC Labs. A lot of teams start from its example notebooks, so whatever the examples do tends to end up in real models.
 
-PyMC-Marketing is one of the main open source libraries for building one. A lot of teams start from its example notebooks, so whatever the examples do tends to end up in real models.
+## What is wrong with one search channel?
 
-## The problem
+Putting brand and non-brand Google Ads campaigns into one search channel mixes two different things. Non-brand spend is a media input you control. Brand spend rises when other media make more people search your name, so it behaves like an outcome. Blended together, the model credits search for demand that TV and other media created.
+
+I've watched this happen in one account. Brand search spend was cut about 40% twice, once last winter and once this fall. Brand leads in the CRM stayed flat both times: 168 to 166 a month, then 4.3 to 4.4 a day. It is a before-and-after read, not a controlled test, but spend and leads did not move together. Blend brand into your "search" line and it takes credit for sales other media drove.
 
 The notebook that loads ad platform data groups spend by platform. So every Google Ads campaign lands in one channel, brand and non-brand search together.
 
@@ -37,41 +49,53 @@ That's the natural way to do it. It's also how most hand-built models I see are 
 
 Brand and non-brand are pretty different things, though.
 
-Non-brand search buys demand you wouldn't otherwise reach. Spend goes up when you raise bids or budget. That's a media input.
+Non-brand search is search on generic terms, like "expense software". It buys demand you wouldn't otherwise reach. Spend goes up when you raise bids or budget. That's a media input.
 
-Brand search mostly catches people who were already looking for you. Spend goes up when more people search your name, usually because of something else you ran. That's closer to an outcome than an input.
+Brand search is search on your own company or product name. It mostly catches people who were already looking for you. Spend goes up when more people search your name, usually because of something else you ran. That's closer to an outcome than an input.
 
-## What the model does with it
+## What does the model do with it?
+
+The model sees search spend and sales rising in the same weeks and gives search the credit, which shrinks TV's estimated effect. The optimizer then moves budget out of TV and into search, mostly buying brand clicks you were going to get anyway. The mistake looks scientific because a model produced it.
 
 Say a TV flight lifts brand searches 40%. Brand search spend rises with it, because there are more searches to show up on.
 
-The model sees search spend and sales going up in the same weeks. Search gets the credit. TV's estimated effect shrinks.
-
-Then the optimizer does what it's told and moves money out of TV and into search. Which mostly buys clicks you were going to get anyway.
-
 I learned this one in ad accounts, years before I touched a model. Blended brand and non-brand ROAS makes search look great in a report. A model makes the same mistake look more scientific.
 
-## The fix
+## How do you fix it?
 
-Split them before the data goes in. Tag every Google Ads campaign as brand or non-brand, and give the model two channels where it had one. A rule on campaign names is usually enough.
+Split brand from non-brand before the data goes into the model. Tag every Google Ads campaign as one or the other, usually with a rule on campaign names, and give the model two channels where it had one. The step is small, and it changes how credit is divided across every other channel.
 
-The notebook now has that step, and the loader's docs say brand and non-brand usually belong in separate channels. Juan Orduz, one of the maintainers, invited the PR and merged it the next day. Thanks Juan.
+The notebook now has that step, and the loader's docs say brand and non-brand usually belong in separate channels. Juan Orduz, one of the PyMC-Marketing maintainers, invited the PR and merged it the next day. Thanks Juan.
 
 I'd probably go one step further and leave brand search out of the media inputs altogether. At minimum it shouldn't share a column with non-brand.
 
-## Why I'm doing this
+## Why am I putting these rules into open source tools?
 
-That's 7 fixes merged into 6 open source marketing tools so far, including Google's official Google Ads MCP and Corey Haines' marketing skills.
+I'm putting paid media rules into open source marketing tools because a mistake fixed in one popular tool stops being copied by everyone who uses it. So far that is 7 fixes merged into 6 tools, including Google's official Google Ads MCP and Corey Haines' marketing skills.
 
 None of them are clever. Each one is a rule I learned the hard way, written into a tool other marketers rely on. A rule in my own tools helps my clients. The same rule in PyMC-Marketing helps everyone who copies that notebook.
 
-I keep the rules written up in one place, each with a pattern you can search your own code for. I have a long list left.
+I keep the rules written up in one place, the paid-media-agent-guardrails repo, each with a pattern you can search your own code for. This one is rule PMG-016. I have a long list left.
 
 If you maintain a marketing tool and want a second pair of eyes on the paid media logic, happy to look.
 
 - [The PR](https://github.com/pymc-labs/pymc-marketing/pull/3338)
 - [The rule: PMG-016](https://github.com/mharnett/paid-media-agent-guardrails/blob/main/rules/PMG-016-split-brand-search-in-mmm.md)
-- [All the rules](https://github.com/mharnett/paid-media-agent-guardrails)`,
+- [All the rules](https://github.com/mharnett/paid-media-agent-guardrails)
+
+## FAQ
+
+### Should I separate brand and non-brand search in my marketing mix model?
+
+Yes. Non-brand search is a media input you control with bids and budget. Brand search mostly follows demand that other media created, so it behaves like an outcome. Give the model two channels, or leave brand out of the media inputs, so it stops taking credit it did not earn.
+
+### Does brand search spend drive sales?
+
+Mostly not. In one B2B software account I manage, cutting brand spend about 40% twice left brand leads flat: 168 to 166 a month, then 4.3 to 4.4 a day. It is a before-and-after read, not a controlled test, but spend and leads did not move together.
+
+### How do I tell brand from non-brand campaigns in my data?
+
+Start with campaign names. Any campaign built around your company or product name is brand, and everything else is non-brand. Check search terms too, because some non-brand campaigns still catch searches for your name. Tag the campaigns before the data goes into the model.`,
   },
   {
     slug: "status-filters-hide-spend",
