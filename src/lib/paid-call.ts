@@ -4,8 +4,8 @@
 export const paidCall = {
   priceUsd: 50,
   minutes: 15,
-  // Paste the buy.stripe.com Payment Link here once it exists.
-  paymentLinkUrl: "",
+  // Stripe Payment Link "15-minute call with Mark Harnett" ($50, one-time).
+  paymentLinkUrl: "https://book.stripe.com/14A4gyeyM2JY0Bf6Nn1Jm01",
 };
 
 export function isPaymentLinkLive(url: string = paidCall.paymentLinkUrl): boolean {
