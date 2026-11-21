@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { drakMcpServers, ownClientServers, type McpServer } from "@/lib/drak-mcp-scopes";
 
 export const metadata: Metadata = {
   title: "drak-mcp — AI assistant access to your marketing platforms",
@@ -7,48 +8,27 @@ export const metadata: Metadata = {
     "Drak Marketing's open-source MCP servers let Claude and other AI assistants securely query and manage Google Ads, Google Analytics 4, Google Search Console, Google Tag Manager, and other marketing platforms on your behalf.",
 };
 
-const mcps: Array<{
-  name: string;
-  description: string;
-  scopes: string[];
-  npm: string;
-}> = [
-  {
-    name: "mcp-google-ads",
-    description:
-      "Read campaign, keyword, and search-term performance; create campaigns, ad groups, and ads; manage budgets and bids. Safe by default — all mutations are created PAUSED.",
-    scopes: ["https://www.googleapis.com/auth/adwords"],
-    npm: "https://www.npmjs.com/package/mcp-google-ads",
-  },
-  {
-    name: "mcp-ga4",
-    description:
-      "Run standard and realtime reports, list and create custom dimensions and metrics, inspect data streams.",
-    scopes: ["https://www.googleapis.com/auth/analytics.readonly"],
-    npm: "https://www.npmjs.com/package/mcp-ga4",
-  },
-  {
-    name: "mcp-google-gsc",
-    description:
-      "Query Search Console search analytics, list verified sites, inspect URL indexing status.",
-    scopes: [
-      "https://www.googleapis.com/auth/webmasters.readonly",
-      "https://www.googleapis.com/auth/webmasters",
-    ],
-    npm: "https://www.npmjs.com/package/mcp-google-gsc",
-  },
-  {
-    name: "mcp-gtm-ga4",
-    description:
-      "List tags, triggers, and variables in Google Tag Manager containers; create GA4 tags; preview and publish container versions.",
-    scopes: [
-      "https://www.googleapis.com/auth/tagmanager.readonly",
-      "https://www.googleapis.com/auth/tagmanager.edit.containers",
-      "https://www.googleapis.com/auth/tagmanager.publish",
-    ],
-    npm: "https://www.npmjs.com/package/mcp-gtm-ga4",
-  },
-];
+function ServerList({ servers }: { servers: McpServer[] }) {
+  return (
+    <div className="mt-4 space-y-4">
+      {servers.map((m) => (
+        <div key={m.name} className="border-l-2 border-muted pl-4">
+          <p className="font-semibold text-foreground">{m.name}</p>
+          <p className="mt-1">{m.description}</p>
+          <p className="mt-2 text-xs">
+            <span className="font-medium text-foreground">Scopes:</span>{" "}
+            <code className="text-xs break-all">{m.scopes.join(", ")}</code>
+          </p>
+          <p className="mt-1 text-xs">
+            <a href={m.npm} className="font-medium text-foreground hover:underline">
+              npm package →
+            </a>
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function DrakMcpPage() {
   return (
@@ -89,27 +69,23 @@ export default function DrakMcpPage() {
             Google APIs and OAuth scopes used
           </h2>
           <p>
-            The MCP servers below request specific OAuth scopes from your Google account when you
-            first authorize them. Each scope is scoped to exactly what the MCP needs — no broad
-            Google-wide permissions.
+            The drak_mcp OAuth app requests only the scopes below. Each server asks for the
+            narrowest scope its tools need, and nothing beyond Google Ads, Google Analytics and
+            Search Console.
           </p>
-          <div className="mt-4 space-y-4">
-            {mcps.map((m) => (
-              <div key={m.name} className="border-l-2 border-muted pl-4">
-                <p className="font-semibold text-foreground">{m.name}</p>
-                <p className="mt-1">{m.description}</p>
-                <p className="mt-2 text-xs">
-                  <span className="font-medium text-foreground">Scopes:</span>{" "}
-                  <code className="text-xs break-all">{m.scopes.join(", ")}</code>
-                </p>
-                <p className="mt-1 text-xs">
-                  <a href={m.npm} className="font-medium text-foreground hover:underline">
-                    npm package →
-                  </a>
-                </p>
-              </div>
-            ))}
-          </div>
+          <ServerList servers={drakMcpServers} />
+        </div>
+
+        <div>
+          <h2 className="text-base font-semibold text-foreground mb-2">
+            Servers that use your own OAuth client
+          </h2>
+          <p>
+            These servers need broader Tag Manager or Analytics edit scopes. They do not use the
+            drak_mcp app. You authorize them with an OAuth client you create in your own Google
+            Cloud project, so the grant is between your account and your project.
+          </p>
+          <ServerList servers={ownClientServers} />
         </div>
 
         <div>
