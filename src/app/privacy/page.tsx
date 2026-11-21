@@ -12,7 +12,7 @@ export default function PrivacyPage() {
         Privacy Policy
       </h1>
       <p className="mt-3 text-sm text-muted-foreground">
-        Last updated: April 17, 2026
+        Last updated: November 20, 2026
       </p>
 
       <div className="mt-8 space-y-6 text-sm text-muted-foreground leading-relaxed">
@@ -97,6 +97,18 @@ export default function PrivacyPage() {
               drakmarketing.com/drak-mcp
             </a>
             .
+          </p>
+          <p className="mt-3">
+            <strong className="text-foreground">Limited Use.</strong>{" "}
+            drak_mcp&apos;s use and transfer of information received from
+            Google APIs adheres to the{" "}
+            <a
+              href="https://developers.google.com/terms/api-services-user-data-policy"
+              className="font-medium text-foreground hover:underline"
+            >
+              Google API Services User Data Policy
+            </a>
+            , including the Limited Use requirements.
           </p>
           <p className="mt-3">
             <strong className="text-foreground">
