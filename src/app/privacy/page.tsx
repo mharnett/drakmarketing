@@ -67,7 +67,7 @@ export default function PrivacyPage() {
             Google Ads, Google Analytics 4, Google Search Console, Google Tag
             Manager, and other marketing platforms on behalf of the signed-in
             user. The OAuth app is registered with Google as{" "}
-            <strong className="text-foreground">drak_mcp</strong>.
+            <strong className="text-foreground">drak-mcp</strong>.
           </p>
           <p className="mt-3">
             <strong className="text-foreground">Where your data lives.</strong>{" "}
@@ -100,7 +100,7 @@ export default function PrivacyPage() {
           </p>
           <p className="mt-3">
             <strong className="text-foreground">Limited Use.</strong>{" "}
-            drak_mcp&apos;s use and transfer of information received from
+            drak-mcp&apos;s use and transfer of information received from
             Google APIs adheres to the{" "}
             <a
               href="https://developers.google.com/terms/api-services-user-data-policy"
@@ -114,7 +114,7 @@ export default function PrivacyPage() {
             <strong className="text-foreground">
               How to revoke access.
             </strong>{" "}
-            You can revoke the drak_mcp OAuth grant at any time from{" "}
+            You can revoke the drak-mcp OAuth grant at any time from{" "}
             <a
               href="https://myaccount.google.com/permissions"
               className="font-medium text-foreground hover:underline"
