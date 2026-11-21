@@ -69,7 +69,7 @@ export default function DrakMcpPage() {
             Google APIs and OAuth scopes used
           </h2>
           <p>
-            The drak_mcp OAuth app requests only the scopes below. Each server asks for the
+            The drak-mcp OAuth app requests only the scopes below. Each server asks for the
             narrowest scope its tools need, and nothing beyond Google Ads, Google Analytics and
             Search Console.
           </p>
@@ -82,7 +82,7 @@ export default function DrakMcpPage() {
           </h2>
           <p>
             These servers need broader Tag Manager or Analytics edit scopes. They do not use the
-            drak_mcp app. You authorize them with an OAuth client you create in your own Google
+            drak-mcp app. You authorize them with an OAuth client you create in your own Google
             Cloud project, so the grant is between your account and your project.
           </p>
           <ServerList servers={ownClientServers} />
@@ -97,7 +97,7 @@ export default function DrakMcpPage() {
             </li>
             <li>
               Your browser opens to Google&apos;s standard OAuth consent screen. You review the
-              requested scopes and the &quot;drak_mcp&quot; app name, then approve.
+              requested scopes and the &quot;drak-mcp&quot; app name, then approve.
             </li>
             <li>
               Google issues a refresh token scoped to your account. The MCP stores it locally on
@@ -122,7 +122,7 @@ export default function DrakMcpPage() {
             >
               myaccount.google.com/permissions
             </a>
-            . Look for &quot;drak_mcp&quot; and click &quot;Remove access&quot;. You can also
+            . Look for &quot;drak-mcp&quot; and click &quot;Remove access&quot;. You can also
             delete the local credentials file to clear stored tokens.
           </p>
         </div>

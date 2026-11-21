@@ -12,7 +12,7 @@ export default function PrivacyPage() {
         Privacy Policy
       </h1>
       <p className="mt-3 text-sm text-muted-foreground">
-        Last updated: November 20, 2026
+        Last updated: November 21, 2026
       </p>
 
       <div className="mt-8 space-y-6 text-sm text-muted-foreground leading-relaxed">
@@ -33,9 +33,10 @@ export default function PrivacyPage() {
           </h2>
           <p>
             We collect information you voluntarily provide through our contact
-            form: your name, email address, and message. We do not collect
-            information automatically beyond standard server logs (IP address,
-            browser type, pages visited).
+            form: your name, email address, and message. We also collect
+            standard server logs (IP address, browser type, pages visited) and,
+            through Google Analytics, usage data such as pages viewed, device
+            and browser type, and approximate location.
           </p>
         </div>
 
@@ -67,7 +68,7 @@ export default function PrivacyPage() {
             Google Ads, Google Analytics 4, Google Search Console, Google Tag
             Manager, and other marketing platforms on behalf of the signed-in
             user. The OAuth app is registered with Google as{" "}
-            <strong className="text-foreground">drak_mcp</strong>.
+            <strong className="text-foreground">drak-mcp</strong>.
           </p>
           <p className="mt-3">
             <strong className="text-foreground">Where your data lives.</strong>{" "}
@@ -100,7 +101,7 @@ export default function PrivacyPage() {
           </p>
           <p className="mt-3">
             <strong className="text-foreground">Limited Use.</strong>{" "}
-            drak_mcp&apos;s use and transfer of information received from
+            drak-mcp&apos;s use and transfer of information received from
             Google APIs adheres to the{" "}
             <a
               href="https://developers.google.com/terms/api-services-user-data-policy"
@@ -114,7 +115,7 @@ export default function PrivacyPage() {
             <strong className="text-foreground">
               How to revoke access.
             </strong>{" "}
-            You can revoke the drak_mcp OAuth grant at any time from{" "}
+            You can revoke the drak-mcp OAuth grant at any time from{" "}
             <a
               href="https://myaccount.google.com/permissions"
               className="font-medium text-foreground hover:underline"
@@ -145,8 +146,9 @@ export default function PrivacyPage() {
           <p>
             Our website is hosted on Vercel. Contact form submissions are
             processed through Formspree. These services may collect standard
-            server logs. We may use Google Analytics to understand site traffic.
-            Each service operates under its own privacy policy.
+            server logs. We use Google Analytics 4 to understand site traffic,
+            with advertising features turned off. Each service operates under
+            its own privacy policy.
           </p>
         </div>
 
@@ -155,9 +157,12 @@ export default function PrivacyPage() {
             Cookies
           </h2>
           <p>
-            We use only essential cookies required for the website to function.
-            Third-party analytics tools may set their own cookies. You can
-            disable cookies in your browser settings.
+            We use essential cookies required for the website to function, and
+            Google Analytics cookies to measure site traffic. Visitors in the
+            European Economic Area, the United Kingdom and Switzerland get no
+            analytics cookies; Google Analytics receives only cookieless,
+            aggregate measurements from those regions. We set no advertising
+            cookies. You can disable cookies in your browser settings.
           </p>
         </div>
 
