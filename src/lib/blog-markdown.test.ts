@@ -5,6 +5,8 @@ import { join } from "node:path";
 import { isVideoSrc, parseImageBlock, renderInlineMarkdown } from "./blog-markdown.ts";
 import { blogPosts } from "./blog-posts.ts";
 import { extractFaqs } from "./blog-seo.ts";
+import { allCaseStudies } from "./case-studies.ts";
+import { clientNameEntries, mentions } from "./client-names.ts";
 
 test("renderInlineMarkdown keeps bold and italic", () => {
   assert.equal(renderInlineMarkdown("a **b** *c*"), "a <strong>b</strong> <em>c</em>");
@@ -124,7 +126,11 @@ test("split-brand-search-in-mmm post is dated for Monday, explains MMM and carri
   assert.ok(!post!.content.includes("43%"), "spend-share range was replaced by the incrementality point");
   assert.ok(post!.content.split("\n\n")[0].includes("40%"), "incrementality point leads the post");
   assert.ok(faqs.some((f) => f.question === "Does brand search spend drive sales?"), "FAQ answers the incrementality question");
-  assert.ok(!/forcepoint|neon/i.test(post!.content.replace(/paid-media-agent-guardrails/g, "")), "no client names");
+  // The roster is the case-study clients plus the optional BLOG_LINT_CLIENT_NAMES env var.
+  const roster = clientNameEntries(allCaseStudies, process.env.BLOG_LINT_CLIENT_NAMES);
+  assert.ok(roster.length > 0, "the case-study roster is empty, so the client-name check would check nothing");
+  const named = roster.filter((e) => mentions(post!.content, e.name)).map((e) => e.label);
+  assert.deepEqual(named, [], "no client names");
   // Key takeaways: a labeled block, then five bullets.
   const blocks = post!.content.split("\n\n");
   assert.equal(blocks[1], "**Key takeaways**");
