@@ -143,37 +143,44 @@ If your numbers don't match billing, look for a status filter on a date-ranged q
     author: "Mark Harnett",
     excerpt:
       "CPA moves 20-30% week to week on most accounts with nothing wrong. If your agent (or your analyst) compares this week to last week, it's mostly reacting to noise.",
-    content: `I got a PR merged into Corey Haines' marketing skills repo this week. It's one of the most used collections of marketing skills for AI agents, around 60k stars on GitHub, and Corey merges outside fixes fast. That's a big part of why it's good.
+    content: `**Short answer:** Don't judge an ad change against last week. Compare it to the trailing 6-8 weeks. On most accounts CPA and conversions move 20-30% week to week with nothing wrong, so a week-over-week comparison is mostly reacting to noise.
 
-The fix was small. It's also the mistake I see most often, from agents and from people.
+## How much does CPA normally vary week to week?
 
-## The problem
+On most accounts I see, CPA and conversions move 20-30% from one week to the next with nothing wrong. Auctions shift. Conversions show up late. Compare one week to the one before and you get a new "fix this" every Monday. The next Monday the number swings back and you reverse yourself.
 
-The ads skill has a weekly "operating check". It tells the agent to hold steady if a change is inside normal variance. That's the right instinct.
+It's the mistake I see most often, from agents and from people.
 
-It just didn't say what normal variance was. So an agent falls back to the easy comparison: this week vs last week.
+## What should you compare instead?
 
-On most accounts CPA and conversions move 20-30% week to week with nothing wrong. Auctions shift, a holiday lands, conversions show up late. Compare one week to the one before and you get a new "fix this" every Monday. The next Monday the number swings back and the agent reverses itself.
+Compare this week to the range of the trailing 6-8 weeks. If it's inside that range, it's a normal week and the right call is to leave it alone. If it's outside, then it's worth digging in.
 
-## What I do instead
-
-I look at the trailing 6-8 weeks first.
-
-Say CPA ran between 80 and 115 over the last 8 weeks. This week it's 105, up 25% on last week's 84. Week over week that looks like an alarm. Against the 8-week range it's a normal week, and the right call is to leave it alone.
+Say CPA ran between 80 and 115 over the last 8 weeks. This week it's 105, up 25% on last week's 84. Week over week that looks like an alarm. Against the 8-week range it's a normal week.
 
 ![Same week, two verdicts: CPA up 25% on last week, but inside the 8-week range](/images/blog/one-week-cpa.svg)
 
-If this week is outside that range, then it's worth digging in.
+The chart is a hypothetical account's weekly CPA over 10 weeks. The 8 weeks before this one ran from 80 to 115. Last week was 84 and this week is 105, up 25%. That's inside the range, so hold.
 
-The exceptions are facts, not trends. Overspend, broken tracking, a landing page that's down, a disapproved ad. Those you fix right away, no baseline needed.
+## When should you act on one week?
 
-## Why this matters more with agents
+When the problem is a fact, not a trend. These you fix right away, no baseline needed:
 
-A person who over-reacts to one bad week does it once a week. An agent running on a schedule does it every time it runs, across every account, and it writes a confident explanation each time. The baseline has to be in the instructions, because the agent won't add it on its own.
+- Overspend
+- Broken tracking
+- A landing page that's down
+- A disapproved ad
 
-The PR adds that baseline to the skill, plus a test case for a bad week that's actually inside the normal range.
+## Why do AI agents make this worse?
 
-## The write-up
+A person who over-reacts to one bad week does it once a week. An agent on a schedule does it on every run and every account. And it writes a confident explanation each time. The baseline has to be in the instructions, because the agent won't add it on its own.
+
+## What did I change in the marketing skills repo?
+
+I got a PR merged into Corey Haines' marketing skills repo this week. It's one of the most used collections of marketing skills for AI agents, around 60k stars on GitHub, and Corey merges outside fixes fast. That's a big part of why it's good.
+
+The ads skill has a weekly "operating check". It tells the agent to hold steady if a change is inside normal variance. That's the right instinct. It just didn't say what normal variance was, so an agent falls back to the easy comparison: this week vs last week.
+
+The PR adds the 6-8 week baseline to the skill, plus a test case for a bad week that's actually inside the normal range.
 
 I keep these rules written up in one place, with the pattern to search for and the fix that's been merged:
 
@@ -443,12 +450,14 @@ Using Dynamic Creative, our client **Tinkergarten tested various elements and fo
     date: "2026-08-01",
     author: "Mark Harnett",
     excerpt:
-      "Meta's default attribution credits conversions that would have happened anyway. Meta's API exposes an incrementality number almost nobody reports — and now AI assistants can pull it automatically.",
-    content: `Meta recently released an official MCP server — the connector that lets AI assistants like Claude or ChatGPT work directly inside your ad account. It's good, and if you manage Meta ads with AI you should connect it. I also built my own Meta MCP, and I still run both. This post explains why, and the answer is really about one word: incrementality.
+      "Meta's default attribution credits conversions that would have happened anyway. Meta's API exposes an incrementality number almost nobody reports, and now AI assistants can pull it automatically.",
+    content: `**Short answer:** Yes. Meta's default 7-day-click, 1-day-view attribution credits conversions the ads didn't cause. Meta's API also exposes an incrementality breakdown, its modeled estimate of the conversions the ads did cause. Reported divided by incremental is your inflation factor.
 
-## The number in your report
+In one B2B software account I manage, Meta credited a retargeting campaign with more than 100 leads. Its incrementality number for the same campaign was 20. So the reported number was more than 5 times the causal one. That campaign targets people already in the CRM, about the warmest audience there is, so it's probably close to the worst case.
 
-Open any Meta ads report and the conversion number you see is attributed on a 7-day-click + 1-day-view window. That means Meta takes credit for a purchase if the buyer clicked an ad in the last 7 days — or merely *saw* one in the last day.
+## Why are Meta's reported conversions inflated?
+
+Because the default window gives Meta credit for a purchase if the buyer clicked an ad in the last 7 days, or merely *saw* one in the last day. That's the 7-day-click + 1-day-view window behind the conversion number in any Meta ads report.
 
 Think about who's inside that number:
 
@@ -456,67 +465,87 @@ Think about who's inside that number:
 - Retargeted shoppers who were already mid-checkout when the ad "reached" them.
 - Anyone who scrolled past an impression yesterday and converted today for unrelated reasons.
 
-None of those conversions were *caused* by the ad. All of them are in the reported number. That's not fraud — it's just what attribution is: credit assignment, not causation.
+None of those conversions were *caused* by the ad. All of them are in the reported number. That isn't fraud. Attribution is credit assignment, and credit isn't causation.
 
-## The number Meta doesn't lead with
+## What is Meta's incrementality attribution?
 
-Here's the part most advertisers don't know: Meta's own API exposes an \`incrementality\` attribution breakdown — Meta's modeled estimate of conversions that would **not** have happened without the ad. It comes out of the same measurement science behind their Conversion Lift program, and it's sitting in the same insights endpoint as the default number.
+It's Meta's modeled estimate of conversions that would **not** have happened without the ad. Meta's own API exposes it as an \`incrementality\` attribution breakdown. It comes out of the same measurement science behind their Conversion Lift program, and it's sitting in the same insights endpoint as the default number.
 
-Almost nobody reports it. The incentives are obvious: the default number is bigger, and bigger numbers make everyone at the table feel better. Agencies get to report more conversions, Meta gets more budget, and the gap between "attributed" and "caused" quietly compounds in your planning.
+Almost nobody reports it. The incentives are obvious: the default number is bigger, and bigger numbers make everyone at the table feel better. Agencies get to report more conversions and Meta gets more budget. Meanwhile the gap between "attributed" and "caused" quietly compounds in your planning.
 
-## What I built
+## How do you measure the inflation factor?
 
-I published an open-source MCP server — [mcp-meta-ads-incrementality](https://github.com/mharnett/mcp-meta-ads-incrementality) — that flips the default. When an AI assistant pulls Meta performance through it, the incrementality window leads. Ask for the standard windows in the same call and it computes the gap on every row:
+Divide reported conversions by incremental conversions for the same rows and dates. I published an open-source MCP server, [mcp-meta-ads-incrementality](https://github.com/mharnett/mcp-meta-ads-incrementality), that does it for you. When an AI assistant pulls Meta performance through it, the incrementality window leads. Ask for the standard windows in the same call and it computes the gap on every row:
 
-- **inflation_factor** — reported conversions ÷ incremental conversions
-- **overstatement_pct** — the share of the reported number the ads didn't cause
+- **inflation_factor:** reported conversions ÷ incremental conversions
+- **overstatement_pct:** the share of the reported number the ads didn't cause
 
-So instead of "the campaign drove 100 conversions," the report reads: "the campaign was credited with 100 conversions, of which roughly 40 were incremental — the reported number is 2.5× the causal one." Same API, same data, very different budget conversation.
+So instead of "the campaign drove 100 conversions," the report reads: "the campaign was credited with 100 conversions, of which roughly 40 were incremental. The reported number is 2.5× the causal one." Same API and same data. A very different budget conversation.
 
-Two honest caveats. Meta's incrementality window is a modeled estimate, not a per-campaign randomized holdout — when the dollars are big enough, a proper Conversion Lift study is still the gold standard. And brand campaigns will always look worse under incrementality than non-brand, which is exactly the point: capturing existing demand is cheap and mostly non-incremental.
+Two honest caveats. Meta's incrementality window is a modeled estimate, not a per-campaign randomized holdout. When the dollars are big enough, a proper Conversion Lift study is still the gold standard. And brand campaigns will always look worse under incrementality than non-brand, which is exactly the point: capturing existing demand is cheap and mostly non-incremental.
 
-## Why run both MCPs
+## Why run Meta's official MCP and the incrementality MCP?
 
-Meta's official MCP and mine aren't competitors — they split cleanly along the line of *operate* vs. *evaluate*.
+Because they do different jobs. Meta recently released an official MCP server, the connector that lets AI assistants like Claude or ChatGPT work directly inside your ad account. It's good, and if you manage Meta ads with AI you should connect it. I still run my own next to it. They split along the line of *operate* vs. *evaluate*.
 
 **Meta's official MCP** is the better operator. First-party OAuth (no access tokens to babysit), product catalog management, pixel and CAPI signal diagnostics, campaign creation with everything landing paused by default, plus governance controls for what AI agents may touch. It's the right tool for building and running the account.
 
-**The incrementality MCP** is the evaluator. The official server reports the standard attributed number — the inflated one. Mine exists so that when the AI answers "what's working?", the causal number leads and the inflation is quantified next to it.
+**The incrementality MCP** is the evaluator. The official server reports the standard attributed number, the inflated one. Mine exists so that when the AI answers "what's working?", the causal number leads and the inflation is quantified next to it.
 
 Run the account with Meta's tools. Judge the account with incrementality. The one thing you shouldn't do is let the platform that sells you the ads also define, unchallenged, the number that decides how much you spend on them.
 
-## Try it on your own account
+## How do you check your own account?
 
-The server is MIT-licensed and on npm (\`npm install -g mcp-meta-ads-incrementality\`). If your reports have only ever shown the default number, pull one month both ways and look at the inflation factor. Whatever it says, you'll know something about your account that most advertisers never check — and you can decide which number deserves to drive next quarter's budget.`,
+Pull one month both ways and look at the inflation factor. The server is MIT-licensed and on npm (\`npm install -g mcp-meta-ads-incrementality\`). If your reports have only ever shown the default number, you'll know something about your account that most advertisers never check. Then you can decide which number deserves to drive next quarter's budget.`,
   },
   {
     slug: "object-oriented-task-management",
-    title: "I Learned This in the 90s. It Turns Out It's an AI Skill.",
+    title: "How to Write Tasks AI Agents Can't Get Wrong",
     date: "2026-09-29",
     author: "Mark Harnett",
     excerpt:
-      "My AI agents kept going off the rails. The fix wasn't a smarter agent. It was something I learned in a 90s programming class.",
-    content: `Back in the 90s we all learned object oriented programming. The big idea: before you build anything, define what goes in and what comes out. I didn't think about it for 25 years. Then I started handing real work to AI agents.
+      "Before an agent touches a task, write a Definition of Done and a read-only check, and leave no open questions. I learned the idea in a 90s programming class.",
+    content: `**Short answer:** Before an agent touches a task, write a Definition of Done (the outputs, specific and checkable) and a read-only Verification check, and leave no open questions (the inputs). Then "done" stops being the agent's opinion and becomes a query result.
+
+Before I did this, a classifier I built to guess what my tasks meant got about 40% of 117 wrong. At one point my system logged a step as done 34 times. Nothing had changed once.
+
+## Why do AI agents misread tasks?
+
+Because they can't ask what you meant. A person can walk over and ask. An agent just guesses, and an agent guessing inside a live ad account makes for a very interesting Monday.
 
 I kept having to correct them. I'd write "clean up the AI compliance keywords" and come back to find the agent had done something. Something reasonable, even. Just not what I wanted. Every imprecise task went off the rails.
 
-So naturally I blamed the agent, and built a classifier to guess what my tasks meant. It got about 40% of 117 wrong. It read "build a write layer for the ads API" as a request to go edit an ad account. Which, to be fair, is kind of what the words said.
+So naturally I blamed the agent and built that classifier. It read "build a write layer for the ads API" as a request to go edit an ad account. Which, to be fair, is kind of what the words said.
 
-That's when it clicked. The agent wasn't the problem. My tasks were. A person can walk over and ask what you meant. An agent just guesses, and an agent guessing inside a live ad account makes for a very interesting Monday. At one point my system logged a step as done 34 times. Nothing had changed once.
+That's when it clicked. The agent wasn't the problem. My tasks were.
 
 [McKinsey's latest AI trust survey](https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/tech-forward/state-of-ai-trust-in-2026-shifting-to-the-agentic-era) says the risk with agents is no longer AI saying the wrong thing, but doing it. Only about 30% of companies are any good at governing that. I'm pretty sure I was in the other 70%.
 
-So I went back to the 90s. Every task now needs a Definition of Done (the outputs, specific and checkable), a read-only Verification check, and no unanswered Open Questions (the inputs) before an agent touches it:
+## What goes in a task an agent can't get wrong?
 
-    Done: keywords [list] ENABLED in ad group "AI Compliance", URL /ai-compliance
-    Check: query those keywords
-    Pass: all present, ENABLED, right URL
+The outputs and the inputs, written down before the agent starts. Back in the 90s we all learned object oriented programming. The big idea: before you build anything, define what goes in and what comes out. I didn't think about it for 25 years. Then I started handing real work to AI agents.
 
-Not exciting. That's the point. "Done" stops being the agent's opinion and becomes a query result.
+So I went back to the 90s. Every task now has this before an agent touches it:
+
+- **Definition of Done:** the outputs, specific and checkable
+- **Verification:** a read-only check, and what it returns when the task is done
+- **Open Questions:** the inputs I haven't given it yet. This has to be empty before the agent starts
+
+## What does a finished task look like?
+
+Here's a real one, for a keyword change:
+
+- **Done:** keywords [list] ENABLED in ad group "AI Compliance", URL /ai-compliance
+- **Check:** query those keywords
+- **Pass:** all present, ENABLED, right URL
+
+Not exciting. That's the point. The agent can run the check, and so can I.
+
+## What doesn't this fix?
 
 It doesn't fix everything. I still have a pile of well defined tasks waiting on me to approve something. But now it's painfully obvious which blockers are me.
 
-If you're handing work to agents, write the Definition of Done first. Happy to share my template.`,
+If you're handing work to agents, write the Definition of Done first.`,
   },
 ];
 
