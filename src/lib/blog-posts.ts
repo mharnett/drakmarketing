@@ -2,6 +2,8 @@ export interface BlogPost {
   slug: string;
   title: string;
   date: string;
+  /** Date of the last substantive revision (YYYY-MM-DD). Drives dateModified and the sitemap lastmod; omit it until the post is revised. */
+  updated?: string;
   author: string;
   excerpt: string;
   content: string;

@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { tools } from "@/lib/tools-data";
 import { allCaseStudies } from "@/lib/case-studies";
 import { allBlogPosts } from "@/lib/blog-posts";
+import { postModifiedDate } from "@/lib/blog-seo";
 import { funProjects } from "@/lib/fun-projects";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -23,7 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const blogPages = allBlogPosts.map((p) => ({
     url: `${base}/blog/${p.slug}`,
-    lastModified: new Date(p.date),
+    lastModified: new Date(postModifiedDate(p)),
     changeFrequency: "yearly" as const,
     priority: 0.6,
   }));

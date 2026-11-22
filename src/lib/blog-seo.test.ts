@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { blogPostMetadata, blogPostingJsonLd, extractFaqs, faqPageJsonLd } from "./blog-seo.ts";
+import { blogPostMetadata, blogPostingJsonLd, extractFaqs, faqPageJsonLd, postModifiedDate } from "./blog-seo.ts";
 import type { BlogPost } from "./blog-posts.ts";
 
 const post: BlogPost = {
@@ -22,9 +22,21 @@ test("blogPostingJsonLd is a BlogPosting with a Person author and dates", () => 
   assert.equal(ld.dateModified, "2026-11-16");
   assert.equal(ld.author["@type"], "Person");
   assert.equal(ld.author.name, "Mark Harnett");
-  assert.ok(ld.author.sameAs.some((u: string) => u.includes("linkedin.com")));
+  assert.ok(ld.author.sameAs.includes("https://www.linkedin.com/in/harnett/"));
+  assert.ok(!ld.author.sameAs.some((u: string) => u.includes("/in/markharnett")));
   assert.ok(ld.author.sameAs.some((u: string) => u.includes("github.com/mharnett")));
   assert.equal(ld.mainEntityOfPage, "https://drakmarketing.com/blog/a-post");
+});
+
+test("blogPostingJsonLd uses updated for dateModified and keeps date as datePublished", () => {
+  const ld = blogPostingJsonLd({ ...post, updated: "2026-12-03" });
+  assert.equal(ld.datePublished, "2026-11-16");
+  assert.equal(ld.dateModified, "2026-12-03");
+});
+
+test("postModifiedDate is updated when the post has one, else date", () => {
+  assert.equal(postModifiedDate({ ...post, updated: "2026-12-03" }), "2026-12-03");
+  assert.equal(postModifiedDate(post), "2026-11-16");
 });
 
 test("blogPostMetadata sets canonical and article Open Graph", () => {
