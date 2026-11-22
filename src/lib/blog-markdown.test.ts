@@ -108,39 +108,25 @@ test("split-brand-search-in-mmm post is dated for Monday, explains MMM and carri
     "## Why am I putting these rules into open source tools?",
     "## FAQ",
   ]);
-  // AEO shape: a direct answer before the first heading, and FAQ entries that become FAQPage schema.
+  // The AEO structure (Short answer lead, five key takeaways, 40-60 word section openers,
+  // FAQ question and answer shape, no em dashes) is checked by blog-aeo-lint.test.ts.
+  // This test keeps what is specific to this post.
   const firstBlock = post!.content.split("\n\n")[0];
-  assert.ok(firstBlock.startsWith("**Short answer:**"), "lead with a direct answer");
   assert.ok(firstBlock.includes("PyMC-Marketing") && firstBlock.includes("brand search"), "name the entities up top");
   const faqs = extractFaqs(post!.content);
   assert.equal(faqs.length, 3, "FAQ holds only follow-ups the body does not answer");
-  const words = (t: string) => t.trim().split(/\s+/).length;
-  for (const f of faqs) {
-    assert.ok(f.question.endsWith("?"), `FAQ question: ${f.question}`);
-    assert.ok(words(f.answer) >= 35 && words(f.answer) <= 50, `FAQ answer ${words(f.answer)} words: ${f.question}`);
-  }
   // FAQ questions are ones a reader would type, not insider terms from the post.
   for (const f of faqs) assert.ok(!/PMG-|PyMC|notebook/i.test(f.question), `insider FAQ question: ${f.question}`);
   // First-party incrementality read from one client account, anonymized: no client names.
   for (const n of ["40%", "168", "166", "not a controlled test"]) assert.ok(post!.content.includes(n), `missing ${n}`);
   assert.ok(!post!.content.includes("43%"), "spend-share range was replaced by the incrementality point");
-  assert.ok(post!.content.split("\n\n")[0].includes("40%"), "incrementality point leads the post");
+  assert.ok(firstBlock.includes("40%"), "incrementality point leads the post");
   assert.ok(faqs.some((f) => f.question === "Does brand search spend drive sales?"), "FAQ answers the incrementality question");
   // The roster is the case-study clients plus the optional BLOG_LINT_CLIENT_NAMES env var.
   const roster = clientNameEntries(allCaseStudies, process.env.BLOG_LINT_CLIENT_NAMES);
   assert.ok(roster.length > 0, "the case-study roster is empty, so the client-name check would check nothing");
   const named = roster.filter((e) => mentions(post!.content, e.name)).map((e) => e.label);
   assert.deepEqual(named, [], "no client names");
-  // Key takeaways: a labeled block, then five bullets.
-  const blocks = post!.content.split("\n\n");
-  assert.equal(blocks[1], "**Key takeaways**");
-  assert.equal(blocks[2].split("\n").filter((l) => l.startsWith("- ")).length, 5);
-  // Each section opens with a 40-60 word direct answer.
-  const sections = post!.content.split(/\n(?=## )/).slice(1).filter((x) => !x.startsWith("## FAQ"));
-  for (const sec of sections) {
-    const first = sec.split("\n\n")[1];
-    assert.ok(words(first) >= 40 && words(first) <= 60, `${sec.split("\n")[0]}: opening answer is ${words(first)} words`);
-  }
   assert.ok(post!.content.includes("A marketing mix model (MMM)"), "MMM must be spelled out on first use");
   for (const href of [
     "https://github.com/pymc-labs/pymc-marketing/pull/3338",
@@ -149,7 +135,6 @@ test("split-brand-search-in-mmm post is dated for Monday, explains MMM and carri
   ]) {
     assert.ok(post!.content.includes(`](${href})`), `missing link ${href}`);
   }
-  // Mark's voice: no em dashes. The page has no code-block renderer, so no indented blocks either.
-  assert.equal((post!.content.match(/—/g) || []).length, 0);
+  // The page has no code-block renderer, so no indented blocks.
   assert.equal(post!.content.split("\n\n").filter((b) => b.startsWith("    ")).length, 0);
 });
