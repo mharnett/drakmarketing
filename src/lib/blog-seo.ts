@@ -8,6 +8,11 @@ export interface Faq {
   answer: string;
 }
 
+/** Last substantive revision: `updated` when the post has one, else the publish `date`. */
+export function postModifiedDate(post: BlogPost): string {
+  return post.updated ?? post.date;
+}
+
 /** Schema.org BlogPosting for a post. The author is a Person with profile links, not just a name. */
 export function blogPostingJsonLd(post: BlogPost) {
   const url = `${SITE}/blog/${post.slug}`;
@@ -17,14 +22,14 @@ export function blogPostingJsonLd(post: BlogPost) {
     headline: post.title,
     description: post.excerpt,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: postModifiedDate(post),
     mainEntityOfPage: url,
     image: `${url}/opengraph-image`,
     author: {
       "@type": "Person",
       name: post.author,
       url: `${SITE}/about`,
-      sameAs: ["https://www.linkedin.com/in/markharnett/", "https://github.com/mharnett"],
+      sameAs: ["https://www.linkedin.com/in/harnett/", "https://github.com/mharnett"],
     },
     publisher: { "@type": "Organization", name: "Drak Marketing", url: SITE },
   };

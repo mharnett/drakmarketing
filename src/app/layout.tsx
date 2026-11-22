@@ -69,11 +69,11 @@ export default function RootLayout({
               founder: {
                 "@type": "Person",
                 name: "Mark Harnett",
-                url: "https://www.linkedin.com/in/markharnett/",
+                url: "https://www.linkedin.com/in/harnett/",
               },
               sameAs: [
                 "https://github.com/mharnett",
-                "https://www.linkedin.com/in/markharnett/",
+                "https://www.linkedin.com/in/harnett/",
               ],
             }),
           }}
