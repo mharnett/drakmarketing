@@ -1,32 +1,82 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { blogPosts } from "./blog-posts.ts";
+import { allCaseStudies } from "./case-studies.ts";
+import { clientNameEntries, mentions } from "./client-names.ts";
 
+// The post was retitled for the query people type. The slug stays, so old links still work
+// (the site has no redirects).
 const SLUG = "object-oriented-task-management";
 const MCKINSEY_URL =
   "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/tech-forward/state-of-ai-trust-in-2026-shifting-to-the-agentic-era";
 
-const EXPECTED_EXCERPT =
-  "My AI agents kept going off the rails. The fix wasn't a smarter agent. It was something I learned in a 90s programming class.";
+function post() {
+  const p = blogPosts.find((x) => x.slug === SLUG);
+  assert.ok(p, `expected a blog post with slug "${SLUG}"`);
+  return p!;
+}
+const blocks = () => post().content.split("\n\n");
+const headings = () => blocks().filter((b) => b.startsWith("## ")).map((b) => b.slice(3).trim());
 
-// Verbatim from bus-dev/scratch/blog-object-oriented-task-management-draft.md (v2, 2026-09-29).
-const EXPECTED_CONTENT =
-  "Back in the 90s we all learned object oriented programming. The big idea: before you build anything, define what goes in and what comes out. I didn't think about it for 25 years. Then I started handing real work to AI agents.\n\nI kept having to correct them. I'd write \"clean up the AI compliance keywords\" and come back to find the agent had done something. Something reasonable, even. Just not what I wanted. Every imprecise task went off the rails.\n\nSo naturally I blamed the agent, and built a classifier to guess what my tasks meant. It got about 40% of 117 wrong. It read \"build a write layer for the ads API\" as a request to go edit an ad account. Which, to be fair, is kind of what the words said.\n\nThat's when it clicked. The agent wasn't the problem. My tasks were. A person can walk over and ask what you meant. An agent just guesses, and an agent guessing inside a live ad account makes for a very interesting Monday. At one point my system logged a step as done 34 times. Nothing had changed once.\n\n[McKinsey's latest AI trust survey](https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/tech-forward/state-of-ai-trust-in-2026-shifting-to-the-agentic-era) says the risk with agents is no longer AI saying the wrong thing, but doing it. Only about 30% of companies are any good at governing that. I'm pretty sure I was in the other 70%.\n\nSo I went back to the 90s. Every task now needs a Definition of Done (the outputs, specific and checkable), a read-only Verification check, and no unanswered Open Questions (the inputs) before an agent touches it:\n\n    Done: keywords [list] ENABLED in ad group \"AI Compliance\", URL /ai-compliance\n    Check: query those keywords\n    Pass: all present, ENABLED, right URL\n\nNot exciting. That's the point. \"Done\" stops being the agent's opinion and becomes a query result.\n\nIt doesn't fix everything. I still have a pile of well defined tasks waiting on me to approve something. But now it's painfully obvious which blockers are me.\n\nIf you're handing work to agents, write the Definition of Done first. Happy to share my template.";
-
-test("object-oriented-task-management post exists with the correct metadata", () => {
-  const post = blogPosts.find((p) => p.slug === SLUG);
-  assert.ok(post, `expected a blog post with slug "${SLUG}"`);
-  assert.equal(post!.title, "I Learned This in the 90s. It Turns Out It's an AI Skill.");
-  assert.equal(post!.date, "2026-09-29");
-  assert.equal(post!.author, "Mark Harnett");
-  assert.equal(post!.excerpt, EXPECTED_EXCERPT);
+test("object-oriented-task-management keeps its slug and publish date under the query title", () => {
+  const p = post();
+  assert.equal(p.title, "How to Write Tasks AI Agents Can't Get Wrong");
+  assert.equal(p.date, "2026-09-29");
+  assert.equal(p.author, "Mark Harnett");
 });
 
-test("object-oriented-task-management content matches the draft verbatim", () => {
-  const post = blogPosts.find((p) => p.slug === SLUG);
-  assert.ok(post);
-  assert.equal(post!.content, EXPECTED_CONTENT);
-  // Anchors: the McKinsey source is a real markdown link, and the post stays in Mark's voice (no em dashes).
-  assert.ok(post!.content.includes(`](${MCKINSEY_URL})`));
-  assert.equal((post!.content.match(/\u2014/g) || []).length, 0);
+test("the excerpt and the first block state the method, not the 90s story", () => {
+  const p = post();
+  const first = blocks()[0];
+  assert.ok(first.startsWith("**Short answer:**"), "the first block must start with the short answer");
+  for (const [where, text] of [["excerpt", p.excerpt], ["first block", first]] as const) {
+    assert.match(text, /Definition of Done/, `${where} must name the Definition of Done`);
+    assert.match(text, /check/i, `${where} must name the verification check`);
+    assert.match(text, /open questions/i, `${where} must name the open questions`);
+  }
+  assert.doesNotMatch(first, /^\*\*Short answer:\*\* Back in the 90s/);
+});
+
+test("the 40% of 117 and the 34 false 'done' logs sit near the top, in their own block", () => {
+  const top = blocks().slice(0, 2);
+  const facts = top.find((b) => /40% of 117/.test(b));
+  assert.ok(facts, "the 40% of 117 fact must be in the first two blocks");
+  assert.match(facts!, /34 times/, "the 34 false 'done' logs belong in the same block");
+});
+
+test("the post has question headings, starting with why agents misread tasks", () => {
+  const hs = headings();
+  assert.ok(hs.length >= 3, `expected at least 3 headings, got ${hs.length}`);
+  for (const h of hs) assert.ok(h.endsWith("?"), `"${h}" must be a question`);
+  assert.equal(hs[0], "Why do AI agents misread tasks?");
+});
+
+test("the template is a labeled list the page can render, given inline instead of offered", () => {
+  const bs = blocks();
+  assert.equal(bs.filter((b) => b.startsWith("    ")).length, 0, "the page has no code-block renderer");
+  const example = bs.find((b) => b.startsWith("- **Done:**"));
+  assert.ok(example, "the example must be a list starting with - **Done:**");
+  const lines = example!.split("\n");
+  assert.deepEqual(
+    lines.map((l) => /^- \*\*([^*]+):\*\*/.exec(l)?.[1]),
+    ["Done", "Check", "Pass"],
+  );
+  assert.match(example!, /ad group "AI Compliance"/);
+  const blank = bs.find((b) => b.startsWith("- **Definition of Done:**"));
+  assert.ok(blank, "the blank template must be a list starting with - **Definition of Done:**");
+  for (const label of ["Definition of Done", "Verification", "Open Questions"]) {
+    assert.ok(blank!.includes(`- **${label}:**`), `blank template missing ${label}`);
+  }
+  assert.doesNotMatch(post().content, /Happy to share my template/);
+});
+
+test("object-oriented-task-management keeps its source link, its voice and no client names", () => {
+  const p = post();
+  assert.ok(p.content.includes(`](${MCKINSEY_URL})`));
+  for (const [field, text] of Object.entries({ title: p.title, excerpt: p.excerpt, content: p.content })) {
+    assert.equal((text.match(/—/g) || []).length, 0, `em dash in ${field}`);
+  }
+  const roster = clientNameEntries(allCaseStudies, process.env.BLOG_LINT_CLIENT_NAMES);
+  assert.ok(roster.length > 0);
+  assert.deepEqual(roster.filter((e) => mentions(p.content, e.name)).map((e) => e.label), []);
 });
