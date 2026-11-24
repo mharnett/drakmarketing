@@ -189,7 +189,21 @@ I keep these rules written up in one place, with the pattern to search for and t
 - [The PR](https://github.com/coreyhaines31/marketingskills/pull/945)
 - [The rule: PMG-003](https://github.com/mharnett/paid-media-agent-guardrails/blob/main/rules/PMG-003-dont-decide-from-one-week.md)
 
-If you're letting an agent make budget or bid calls, it's worth checking which comparison it's using. Happy to take a look if you want a second set of eyes.`,
+If you're letting an agent make budget or bid calls, it's worth checking which comparison it's using. Happy to take a look if you want a second set of eyes.
+
+## FAQ
+
+### Is a 25% jump in CPA from last week a problem?
+
+Probably not on its own. On most accounts CPA moves 20-30% from one week to the next with nothing wrong. Auctions shift and conversions show up late. If this week is still inside the range of the last 8 weeks, it's a normal week.
+
+### When should I react to one bad week of ad data?
+
+When the problem is a fact rather than a trend. Overspend, broken tracking, a landing page that's down or a disapproved ad: fix those right away, no baseline needed. Anything else gets checked against the range of the trailing 6-8 weeks first.
+
+### How do I stop an AI agent from overreacting to weekly ad data?
+
+Put the baseline in its instructions. Tell it to compare against the range of the trailing 6-8 weeks and to hold steady inside that range. It won't add that on its own, and an agent on a schedule repeats the mistake on every run and every account.`,
   },
   {
     slug: "unleashing-potential-ad-reels",
@@ -498,7 +512,21 @@ Run the account with Meta's tools. Judge the account with incrementality. The on
 
 ## How do you check your own account?
 
-Pull one month both ways and look at the inflation factor. The server is MIT-licensed and on npm (\`npm install -g mcp-meta-ads-incrementality\`). If your reports have only ever shown the default number, you'll know something about your account that most advertisers never check. Then you can decide which number deserves to drive next quarter's budget.`,
+Pull one month both ways and look at the inflation factor. The server is MIT-licensed and on npm (\`npm install -g mcp-meta-ads-incrementality\`). If your reports have only ever shown the default number, you'll know something about your account that most advertisers never check. Then you can decide which number deserves to drive next quarter's budget.
+
+## FAQ
+
+### How much does Meta overstate conversions?
+
+It depends on the campaign. In one B2B software account I manage, Meta credited a retargeting campaign with more than 100 leads, and its incrementality number was 20. That's more than 5 times. Retargeting people already in the CRM is probably close to the worst case.
+
+### What is the difference between attributed and incremental conversions?
+
+Attributed conversions are the ones Meta's default 7-day-click, 1-day-view window gives the ads credit for. Incremental conversions are Meta's modeled estimate of the ones that would not have happened without the ad. Credit isn't causation, so the attributed number is the bigger one.
+
+### Is Meta's incrementality number as good as a lift test?
+
+No. It's a modeled estimate, not a randomized holdout for each campaign. When the dollars are big enough, a proper Conversion Lift study is still the gold standard. The modeled number comes from the same measurement science, and you can pull it next to the default one.`,
   },
   {
     slug: "object-oriented-task-management",
@@ -547,7 +575,21 @@ Not exciting. That's the point. The agent can run the check, and so can I.
 
 It doesn't fix everything. I still have a pile of well defined tasks waiting on me to approve something. But now it's painfully obvious which blockers are me.
 
-If you're handing work to agents, write the Definition of Done first.`,
+If you're handing work to agents, write the Definition of Done first.
+
+## FAQ
+
+### What is a Definition of Done for an AI agent task?
+
+It's the outputs the task has to produce, written specifically enough to check. In my keyword example, that's a list of keywords enabled in one named ad group with the right URL. Without it, done is whatever the agent thinks it is. Write it before the agent starts.
+
+### How do I check that an AI agent actually finished a task?
+
+Put a read-only check in the task before the agent starts, and say what it returns when the task is done. For a keyword change, query those keywords. It passes when every one is enabled on the right URL. The agent can run it, and so can I.
+
+### What are open questions in an AI agent task?
+
+They're the inputs you haven't given the agent yet. The list has to be empty before the agent starts, because an agent can't ask what you meant. It just guesses. Every imprecise task I handed one went off the rails.`,
   },
 ];
 

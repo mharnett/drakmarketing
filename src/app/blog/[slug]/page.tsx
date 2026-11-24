@@ -3,8 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { allBlogPosts, formatDate } from "@/lib/blog-posts";
-import { isVideoSrc, parseImageBlock, renderInlineMarkdown } from "@/lib/blog-markdown";
-import { blogPostMetadata, blogPostingJsonLd, extractFaqs, faqPageJsonLd } from "@/lib/blog-seo";
+import { type PostBlock, parsePostBlocks } from "@/lib/blog-markdown";
+import { blogPostMetadata, postJsonLd } from "@/lib/blog-seo";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -25,20 +25,16 @@ export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = allBlogPosts.find((p) => p.slug === slug);
   if (!post) notFound();
-  const faqLd = faqPageJsonLd(extractFaqs(post.content));
 
   return (
     <article className="mx-auto max-w-2xl px-6 py-16 md:py-24">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd(post)) }}
-      />
-      {faqLd && (
+      {postJsonLd(post).map((ld) => (
         <script
+          key={ld["@type"]}
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
         />
-      )}
+      ))}
       <Link
         href="/blog"
         className="mb-8 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
@@ -63,64 +59,59 @@ export default async function BlogPostPage({ params }: Props) {
       </header>
 
       <div className="prose prose-neutral max-w-none text-sm leading-relaxed [&_h2]:text-base [&_h2]:font-semibold [&_h2]:mt-8 [&_h2]:mb-3 [&_h3]:text-sm [&_h3]:font-semibold [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:mb-4 [&_p]:text-muted-foreground [&_strong]:text-foreground [&_ul]:text-muted-foreground [&_li]:mb-1">
-        {post.content.split("\n\n").map((block, i) => {
-          const image = parseImageBlock(block);
-          if (image && isVideoSrc(image.src)) {
-            return (
-              <video
-                key={i}
-                src={image.src}
-                poster={image.src.replace(/\.mp4$/i, "-poster.png")}
-                aria-label={image.alt}
-                className="my-6 w-full rounded-md border"
-                autoPlay
-                muted
-                loop
-                playsInline
-                controls
-              />
-            );
-          }
-          if (image) {
-            return (
-              // eslint-disable-next-line @next/next/no-img-element -- static SVG chart; it adapts to dark mode itself
-              <img key={i} src={image.src} alt={image.alt} className="my-6 w-full rounded-md border" />
-            );
-          }
-          if (block.startsWith("### ")) {
-            return <h3 key={i}>{block.slice(4)}</h3>;
-          }
-          if (block.startsWith("## ")) {
-            return (
-              <h2 key={i}>{block.replace("## ", "")}</h2>
-            );
-          }
-          if (block.startsWith("**") && block.endsWith("**")) {
-            return (
-              <p key={i}>
-                <strong>{block.replace(/\*\*/g, "")}</strong>
-              </p>
-            );
-          }
-          if (block.startsWith("- ")) {
-            return (
-              <ul key={i}>
-                {block.split("\n").map((item, j) => (
-                  <li key={j} dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(item.replace("- ", "")) }} />
-                ))}
-              </ul>
-            );
-          }
-          if (block.startsWith("*") && block.endsWith("*") && !block.startsWith("**")) {
-            return (
-              <p key={i} className="italic">
-                {block.replace(/^\*|\*$/g, "")}
-              </p>
-            );
-          }
-          return <p key={i} dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(block) }} />;
-        })}
+        {parsePostBlocks(post.content).map((block, i) => renderBlock(block, i))}
       </div>
     </article>
   );
+}
+
+function renderBlock(block: PostBlock, i: number) {
+  switch (block.kind) {
+    case "video":
+      return (
+        <video
+          key={i}
+          src={block.src}
+          poster={block.poster}
+          aria-label={block.alt}
+          className="my-6 w-full rounded-md border"
+          autoPlay
+          muted
+          loop
+          playsInline
+          controls
+        />
+      );
+    case "image":
+      return (
+        // eslint-disable-next-line @next/next/no-img-element -- static SVG chart; it adapts to dark mode itself
+        <img key={i} src={block.src} alt={block.alt} className="my-6 w-full rounded-md border" />
+      );
+    case "h3":
+      return <h3 key={i}>{block.text}</h3>;
+    case "h2":
+      return <h2 key={i}>{block.text}</h2>;
+    case "strong":
+      return (
+        <p key={i}>
+          <strong>{block.text}</strong>
+        </p>
+      );
+    case "list":
+      return (
+        <ul key={i}>
+          {block.items.map((html, j) => (
+            <li key={j} dangerouslySetInnerHTML={{ __html: html }} />
+          ))}
+        </ul>
+      );
+    case "italic":
+      return (
+        <p key={i} className="italic">
+          {block.text}
+        </p>
+      );
+    case "paragraph":
+      return <p key={i} dangerouslySetInnerHTML={{ __html: block.html }} />;
+  }
 }

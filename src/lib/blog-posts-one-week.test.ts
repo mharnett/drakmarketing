@@ -19,7 +19,12 @@ function post() {
   return p!;
 }
 const blocks = () => post().content.split("\n\n");
-const headings = () => blocks().filter((b) => b.startsWith("## ")).map((b) => b.slice(3).trim());
+// The FAQ section heading is not a question heading; the AEO lint skips it the same way.
+const headings = () =>
+  blocks()
+    .filter((b) => b.startsWith("## "))
+    .map((b) => b.slice(3).trim())
+    .filter((h) => h.toLowerCase() !== "faq");
 
 test("one-week post opens with the answer: compare to the trailing 6-8 weeks, not last week", () => {
   const first = blocks()[0];
