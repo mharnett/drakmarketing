@@ -8,6 +8,7 @@ Read this before drafting or editing a post in `src/lib/blog-posts.ts`, and revi
 
 - **`src/lib/blog-aeo-lint.test.ts`**, for every post dated 2026-11-16 or later: a `**Short answer:**` lead, a `**Key takeaways**` block of five bullets, question headings that each open with a 40 to 60 word answer, a 3 to 5 entry FAQ with 35 to 50 word answers, no em dashes and no client names. Exact bounds are in the file.
 - **Per-post tests** for the three older posts the lint skips, all in `src/lib/`: `blog-posts-one-week.test.ts`, `blog-posts-oop.test.ts` and `blog-posts.test.ts` (the Meta incrementality post).
+- **`src/lib/blog-faq.test.ts`**: the page shows each FAQ entry exactly as the FAQPage JSON-LD states it. For those three older posts it also checks a 3-question FAQ with 35 to 50 word plain-text answers, and that the FAQ states no number the post above it doesn't.
 
 ## Judgment rules
 

@@ -95,3 +95,9 @@ export function faqPageJsonLd(faqs: Faq[]) {
     })),
   };
 }
+
+/** The JSON-LD a post page emits: its BlogPosting, then a FAQPage when the post has an FAQ section. */
+export function postJsonLd(post: BlogPost) {
+  const faqPage = faqPageJsonLd(extractFaqs(post.content));
+  return faqPage ? [blogPostingJsonLd(post), faqPage] : [blogPostingJsonLd(post)];
+}
