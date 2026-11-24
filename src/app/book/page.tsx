@@ -25,7 +25,7 @@ export default function BookPage() {
         <li>• {paidCall.minutes} minutes on Google Meet</li>
         <li>• If we start working together, the ${paidCall.priceUsd} comes off the first invoice</li>
         <li>• If I cancel or miss the call, you get a full refund</li>
-        <li>• If you don&apos;t book within 14 days, email me for a refund</li>
+        <li>• If you don&apos;t book a meeting with me within 14 days, email me for a refund</li>
       </ul>
 
       <div className="mt-8">
