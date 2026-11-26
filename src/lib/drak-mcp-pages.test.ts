@@ -57,3 +57,8 @@ test("privacy page retention no longer covers contact forms only", async () => {
   const end = text.indexOf("</div>", start);
   assert.match(text.slice(start, end), /drak-mcp/);
 });
+
+test("drak-mcp page says where mcp-gtm-ga4 saves its credentials", async () => {
+  const text = await pageText(DRAK_MCP);
+  assert.match(text, /mcp-gtm-ga4's setup writes [^.]*--output[^.]*only your user account can read it/);
+});
