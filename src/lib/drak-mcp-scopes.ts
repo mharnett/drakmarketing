@@ -5,21 +5,29 @@ export interface McpServer {
   npm: string;
 }
 
-// Servers that authorize through the drak-mcp OAuth app. Their scopes must
-// match the drak-mcp consent screen exactly; see drak-mcp-scopes.test.ts.
+// Servers whose published package signs in through the drak-mcp OAuth app.
+// Only mcp-google-ads 1.x embeds that client; see drak-mcp-scopes.test.ts.
 export const drakMcpServers: McpServer[] = [
   {
     name: "mcp-google-ads",
     description:
-      "Read campaign, keyword, and search-term performance; create campaigns, ad groups, and ads; manage budgets and bids. Safe by default — all mutations are created PAUSED.",
+      "Read campaign, keyword, and search-term performance; create campaigns, ad groups, and ads; manage budgets and bids. Safe by default — all mutations are created PAUSED. Versions up to 1.16.1 sign in through the drak-mcp app unless you set your own client. The next major release (2.0) requires your own OAuth client, like the servers below.",
     scopes: ["https://www.googleapis.com/auth/adwords"],
     npm: "https://www.npmjs.com/package/mcp-google-ads",
   },
+];
+
+// Servers whose published package embeds no OAuth client: the user
+// authorizes them with a client from their own Google Cloud project.
+export const ownClientServers: McpServer[] = [
   {
-    name: "mcp-ga4 (read-only)",
+    name: "mcp-ga4",
     description:
-      "Run standard and realtime reports; list data streams, custom dimensions, and custom metrics. On the drak-mcp app it runs read-only and makes no changes to your GA4 properties.",
-    scopes: ["https://www.googleapis.com/auth/analytics.readonly"],
+      "Run standard and realtime reports; list data streams, custom dimensions, and custom metrics. Only the custom-dimension tool needs analytics.edit; without it the server needs only analytics.readonly.",
+    scopes: [
+      "https://www.googleapis.com/auth/analytics.readonly",
+      "https://www.googleapis.com/auth/analytics.edit",
+    ],
     npm: "https://www.npmjs.com/package/mcp-ga4",
   },
   {
@@ -29,11 +37,6 @@ export const drakMcpServers: McpServer[] = [
     scopes: ["https://www.googleapis.com/auth/webmasters.readonly"],
     npm: "https://www.npmjs.com/package/mcp-google-gsc",
   },
-];
-
-// Servers that need broader scopes and do not use the drak-mcp app: the user
-// authorizes them with an OAuth client from their own Google Cloud project.
-export const ownClientServers: McpServer[] = [
   {
     name: "mcp-gtm-ga4",
     description:
@@ -46,16 +49,6 @@ export const ownClientServers: McpServer[] = [
       "https://www.googleapis.com/auth/analytics.edit",
     ],
     npm: "https://www.npmjs.com/package/mcp-gtm-ga4",
-  },
-  {
-    name: "mcp-ga4 (with custom-dimension writes)",
-    description:
-      "The same GA4 server with its custom-dimension tool enabled, which needs analytics.edit.",
-    scopes: [
-      "https://www.googleapis.com/auth/analytics.readonly",
-      "https://www.googleapis.com/auth/analytics.edit",
-    ],
-    npm: "https://www.npmjs.com/package/mcp-ga4",
   },
 ];
 

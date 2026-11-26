@@ -12,7 +12,7 @@ export default function PrivacyPage() {
         Privacy Policy
       </h1>
       <p className="mt-3 text-sm text-muted-foreground">
-        Last updated: November 21, 2026
+        Last updated: November 25, 2026
       </p>
 
       <div className="mt-8 space-y-6 text-sm text-muted-foreground leading-relaxed">
@@ -71,26 +71,26 @@ export default function PrivacyPage() {
             <strong className="text-foreground">drak-mcp</strong>.
           </p>
           <p className="mt-3">
-            <strong className="text-foreground">Where your data lives.</strong>{" "}
-            The MCP servers run locally on your own computer. OAuth refresh
-            tokens issued by Google are stored only on your local filesystem
-            (for example,{" "}
-            <code className="text-xs">
-              ~/Library/Preferences/mcp-google-ads-nodejs/credentials.json
-            </code>{" "}
-            on macOS). All API calls to Google go directly from your computer
-            to Google. Drak Marketing operates no server that receives or
-            proxies your OAuth tokens, API responses, or marketing data.
+            Only mcp-google-ads signs in through the drak-mcp app. The other
+            servers use an OAuth client from your own Google Cloud project.
+            This section covers how all of them handle Google user data.
           </p>
           <p className="mt-3">
             <strong className="text-foreground">
               What data drak-mcp accesses.
             </strong>{" "}
-            Only the Google APIs and scopes you explicitly approve during the
-            OAuth consent flow. Each MCP requests the minimum scope it needs
-            — for example, <code className="text-xs">adwords</code> for Google
-            Ads or <code className="text-xs">analytics.readonly</code> for
-            GA4. The complete scope list per MCP is published at{" "}
+            Only the Google APIs and scopes you approve during the OAuth consent
+            flow. Depending on the server, that is: Google Ads account
+            structure, campaigns, ad groups, ads, keywords, budgets, bids,
+            conversion settings, and performance and search-term reports
+            (<code className="text-xs">adwords</code>); Google Analytics 4
+            reports and property, data stream and custom definition settings
+            (<code className="text-xs">analytics.readonly</code>, plus{" "}
+            <code className="text-xs">analytics.edit</code> for custom
+            dimensions); Search Console search analytics, verified sites and URL
+            inspection results (<code className="text-xs">webmasters.readonly</code>);
+            and Tag Manager containers, tags, triggers, variables and versions.
+            The complete scope list per MCP is published at{" "}
             <a
               href="/drak-mcp"
               className="font-medium text-foreground hover:underline"
@@ -98,6 +98,80 @@ export default function PrivacyPage() {
               drakmarketing.com/drak-mcp
             </a>
             .
+          </p>
+          <p className="mt-3">
+            <strong className="text-foreground">How drak-mcp uses it.</strong>{" "}
+            Only to carry out the requests you make through your AI assistant:
+            run the report you ask for, return the result, or make the change
+            you ask for. drak-mcp does not use Google user data for
+            advertising, does not sell it, and does not send it to Drak
+            Marketing. Drak Marketing does not use it to build or train AI
+            models.
+          </p>
+          <p className="mt-3">
+            <strong className="text-foreground">
+              Transfer to your AI provider.
+            </strong>{" "}
+            When a tool runs, its result (for example report rows, account and
+            campaign names, or settings) goes back to the AI assistant you
+            connected it to. That assistant sends it to the AI provider you
+            choose (for example, Anthropic for Claude) as part of the
+            conversation, under that provider&apos;s terms and privacy policy.
+            This is the only transfer: Google user data is not sent to Drak
+            Marketing or to any other third party.
+          </p>
+          <p className="mt-3">
+            <strong className="text-foreground">How it is protected.</strong>{" "}
+            The MCP servers run locally on your own computer, and API calls go
+            directly from your computer to Google over HTTPS. Drak Marketing
+            operates no server that receives or proxies your OAuth tokens, API
+            responses, or marketing data. Refresh tokens are stored only on your
+            own computer. mcp-google-ads, mcp-google-gsc and mcp-gtm-ga4 write
+            their credentials file as owner-only, so on macOS and Linux only
+            your user account can read it (for example,{" "}
+            <code className="text-xs">
+              ~/Library/Preferences/mcp-google-ads-nodejs/credentials.json
+            </code>{" "}
+            on macOS). mcp-ga4&apos;s setup writes its token into your AI
+            app&apos;s MCP configuration file; protect that file as you would a
+            password.
+          </p>
+          <p className="mt-3">
+            <strong className="text-foreground">Local request log.</strong>{" "}
+            On macOS, mcp-google-ads writes one line per Google Ads API call to{" "}
+            <code className="text-xs">
+              ~/Library/Logs/google-ads-requests.jsonl
+            </code>
+            : the time, caller, computer name, process ids, method, customer
+            id, operation count, whether the call was validate-only, status,
+            error code and, for a successful change, the resource name of each
+            item it wrote. It never records tokens, queries, request bodies or
+            report rows. On Linux and Windows the same line goes to standard
+            error, which your AI app may keep in its own logs. You can set{" "}
+            <code className="text-xs">GOOGLE_ADS_REQUEST_LOG_PATH</code> to
+            write it elsewhere. Separately, mcp-ga4 saves notes its feedback
+            tools record to{" "}
+            <code className="text-xs">~/.config/mcp-ga4/feedback/</code> on your
+            computer.
+          </p>
+          <p className="mt-3">
+            <strong className="text-foreground">Retention and deletion.</strong>{" "}
+            Drak Marketing holds no Google user data from drak-mcp, so there is
+            nothing on our side to retain or delete. On your computer, tokens
+            stay in the credentials file until you delete it. The request log
+            is rotated at 20 MB, keeping at most the current file and one
+            previous file (<code className="text-xs">.1</code>), until you
+            delete them. Your AI provider keeps conversation content under its
+            own retention settings; delete it there. To remove everything:
+            revoke the grant at{" "}
+            <a
+              href="https://myaccount.google.com/permissions"
+              className="font-medium text-foreground hover:underline"
+            >
+              myaccount.google.com/permissions
+            </a>
+            , delete the credentials file and the request log files, and delete
+            the conversations with your AI provider.
           </p>
           <p className="mt-3">
             <strong className="text-foreground">Limited Use.</strong>{" "}
@@ -115,7 +189,8 @@ export default function PrivacyPage() {
             <strong className="text-foreground">
               How to revoke access.
             </strong>{" "}
-            You can revoke the drak-mcp OAuth grant at any time from{" "}
+            You can revoke the drak-mcp OAuth grant, or the grant to your own
+            app, at any time from{" "}
             <a
               href="https://myaccount.google.com/permissions"
               className="font-medium text-foreground hover:underline"
@@ -173,6 +248,8 @@ export default function PrivacyPage() {
           <p>
             We retain contact form submissions only as long as needed to respond
             to your inquiry. You may request deletion of your data at any time.
+            Drak Marketing holds no Google user data from drak-mcp; see
+            retention and deletion in the drak-mcp section above.
           </p>
         </div>
 
