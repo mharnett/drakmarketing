@@ -127,7 +127,7 @@ export default function DrakMcpPage() {
               mcp-google-gsc store it in a credentials file on your own computer under{" "}
               <code className="text-xs">~/Library/Preferences/</code> (macOS),{" "}
               <code className="text-xs">~/.config/</code> (Linux) or{" "}
-              <code className="text-xs">%APPDATA%</code> (Windows); on macOS and Linux the file is
+              <code className="text-xs">%APPDATA%</code>{" "}(Windows); on macOS and Linux the file is
               set so only your user account can read it. mcp-ga4&apos;s setup writes the token
               into your AI app&apos;s MCP configuration file instead.
             </li>
@@ -142,11 +142,11 @@ export default function DrakMcpPage() {
           <h2 className="text-base font-semibold text-foreground mb-2">Where your data goes</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li>
-              <strong className="text-foreground">To Google.</strong> Requests go straight from
+              <strong className="text-foreground">To Google.</strong>{" "}Requests go straight from
               your computer to Google&apos;s APIs. No Drak Marketing server sits in between.
             </li>
             <li>
-              <strong className="text-foreground">To the AI provider you choose.</strong> When
+              <strong className="text-foreground">To the AI provider you choose.</strong>{" "}When
               a tool runs, its result — report rows, account, campaign and keyword names,
               settings — goes back to your AI assistant, which sends it to its AI provider (for
               example, Anthropic for Claude) as part of the conversation. That provider&apos;s
