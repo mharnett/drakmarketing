@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { paidCall, isPaymentLinkLive } from "@/lib/paid-call";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/book" },
   title: "Book a Call",
   description: `Book a ${paidCall.minutes}-minute call with Mark Harnett.`,
   robots: { index: false, follow: false },

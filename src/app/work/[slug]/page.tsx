@@ -18,6 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cs = allCaseStudies.find((c) => c.slug === slug);
   if (!cs) return {};
   return {
+    alternates: { canonical: `/work/${slug}` },
     title: cs.headline,
     description: cs.description.slice(0, 160),
   };

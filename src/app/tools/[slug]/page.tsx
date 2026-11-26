@@ -21,6 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tool = tools.find((t) => t.slug === slug);
   if (!tool) return {};
   return {
+    alternates: { canonical: `/tools/${slug}` },
     title: tool.name,
     description: tool.description,
   };

@@ -10,6 +10,7 @@ import {
 } from "@/lib/case-studies";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/work" },
   title: "Work",
   description:
     "Case studies and client results. B2B SaaS lead generation, app user acquisition, global market expansion, and more.",

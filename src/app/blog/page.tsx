@@ -3,6 +3,7 @@ import Link from "next/link";
 import { allBlogPosts, formatDate } from "@/lib/blog-posts";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/blog" },
   title: "Blog",
   description:
     "Practical advice on Google Ads, Facebook advertising, digital marketing strategy, and AI-powered marketing automation.",

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { drakMcpServers, ownClientServers, type McpServer } from "@/lib/drak-mcp-scopes";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/drak-mcp" },
   title: "drak-mcp — AI assistant access to your marketing platforms",
   description:
     "Drak Marketing's open-source MCP servers let Claude and other AI assistants query and manage Google Ads, Google Analytics 4, Google Search Console, Google Tag Manager, and other marketing platforms on your behalf.",

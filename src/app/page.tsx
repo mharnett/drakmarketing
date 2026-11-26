@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check, Terminal, Wrench, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +7,10 @@ import { ToolCard } from "@/components/tool-card";
 import { tools, totalToolCount, publishedCount } from "@/lib/tools-data";
 import { featuredCaseStudies } from "@/lib/case-studies";
 import { getAllToolStats } from "@/lib/tool-stats";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 const featured = tools.filter((t) =>
   ["google-ads", "linkedin-ads", "bing-ads", "ga4"].includes(t.slug)

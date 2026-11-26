@@ -31,6 +31,7 @@ const INSTALL_CMD = `mkdir -p ~/.claude/skills
 curl -sL https://drakmarketing.com/skills/trademark-serp-watch.tar.gz | tar -xz -C ~/.claude/skills`;
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/tools/trademark-serp-watch" },
   title: NAME,
   description: DESCRIPTION,
 };

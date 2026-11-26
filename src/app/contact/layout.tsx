@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/contact" },
   title: "Contact",
   description:
     "Get in touch with Drak Marketing for AI marketing consulting, MCP tool support, or project inquiries.",
