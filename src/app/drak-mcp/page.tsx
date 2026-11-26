@@ -128,7 +128,9 @@ export default function DrakMcpPage() {
               <code className="text-xs">~/Library/Preferences/</code> (macOS),{" "}
               <code className="text-xs">~/.config/</code> (Linux) or{" "}
               <code className="text-xs">%APPDATA%</code>{" "}(Windows); on macOS and Linux the file is
-              set so only your user account can read it. mcp-ga4&apos;s setup writes the token
+              set so only your user account can read it. mcp-gtm-ga4&apos;s setup writes it to the
+              file you name with <code className="text-xs">--output</code>, also set so only your
+              user account can read it. mcp-ga4&apos;s setup writes the token
               into your AI app&apos;s MCP configuration file instead.
             </li>
             <li>
