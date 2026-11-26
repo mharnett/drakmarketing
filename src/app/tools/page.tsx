@@ -7,6 +7,7 @@ import { tools, totalToolCount } from "@/lib/tools-data";
 import { getAllToolStats } from "@/lib/tool-stats";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/tools" },
   title: "Free Marketing Tools",
   description: `${totalToolCount}+ open-source MCP tools for Google Ads, LinkedIn Ads, Bing Ads, GA4, and more. Install with a single command.`,
 };

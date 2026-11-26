@@ -3,6 +3,7 @@ import Image from "next/image";
 import { totalToolCount } from "@/lib/tools-data";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/about" },
   title: "About",
   description:
     "Drak Marketing builds open-source AI marketing tools and consults on paid media strategy. 25+ years of performance marketing experience.",

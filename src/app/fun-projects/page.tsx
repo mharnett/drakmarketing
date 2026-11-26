@@ -3,6 +3,7 @@ import Link from "next/link";
 import { funProjects, formatFunProjectDate } from "@/lib/fun-projects";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/fun-projects" },
   title: "Fun Projects",
   description:
     "Side projects and reverse-engineering experiments. Things I built for fun with Claude Code.",
